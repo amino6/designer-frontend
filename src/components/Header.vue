@@ -33,6 +33,14 @@
                             >{{ item.name }}</RouterLink
                         >
                     </li>
+                    <li
+                        class="nav-item my-2 text-center">
+                        <button
+                            @click="navbarOpen = false;authStore.logout();"
+                            class="nav-link"
+                            >Logout</button
+                        >
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -51,7 +59,7 @@
         { name: "Login", to: "/login" },
         { name: "Register", to: "/register" },
     ]);
-    const menu_auth = ref([{ name: "Logout", to: "/logout" }]);
+    const menu_auth = ref([]);
 </script>
 
 <style lang="scss" scoped>
