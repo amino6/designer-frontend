@@ -1,0 +1,16 @@
+.nav-link-o.nuxt-link-active {
+
+  &:link,
+  &:hover {
+    color: #0d6efd;
+  }
+}
+
+.nav-link-o.nuxt-link-active {
+  color: #0d6efd;
+}
+
+.nav-link-o:hover,
+.nav-link-o:focus {
+  color: #0d6efd;
+}
