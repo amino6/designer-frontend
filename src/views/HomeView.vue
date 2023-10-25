@@ -1,5 +1,5 @@
 <template>
-    <div class="container-xl">
+    <div class="container-xl mt-4">
         <h1 class="primary-header">Explore Designs And Designers</h1>
         <SearchForm />
         <div class="row filter-section my-4">

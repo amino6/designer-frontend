@@ -6,7 +6,7 @@ function getCookie(name) {
     }
 }
 
-export async function request(url, options) {
+export async function request(url, options, contentType = "application/json") {
     // get cookie
     let csrfToken = getCookie("XSRF-TOKEN");
     url = "http://localhost:8000" + url;
@@ -17,12 +17,23 @@ export async function request(url, options) {
         });
         csrfToken = getCookie("XSRF-TOKEN");
     }
-    return fetch(url, {
-        headers: {
-            "content-type": "application/json",
+
+    let headers;
+    if (contentType === false) {
+        headers = {
             accept: "application/json",
             "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
-        },
+        };
+    } else {
+        headers = {
+            "content-Type": contentType,
+            accept: "application/json",
+            "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
+        };
+    }
+
+    return fetch(url, {
+        headers: headers,
         credentials: "include",
         ...options,
     });

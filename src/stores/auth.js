@@ -36,6 +36,7 @@ export const useAuthStore = defineStore('auth', {
         async login(form) {
             this.isSubmitting = true;
             this.errors = {};
+
             try {
                 const res = await request("/login", {
                     method: "POST",

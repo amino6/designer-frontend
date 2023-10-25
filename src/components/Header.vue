@@ -1,6 +1,6 @@
 <template>
     <header
-        class="header bg-light mb-4 padding-wrapper pt-2 pb-2"
+        class="header bg-light padding-wrapper pt-2 pb-2"
         :class="navbarOpen ? 'navbar-open' : ''">
         <nav class="navbar navbar-light navbar-expand-sm">
             <div class="container-xl">
@@ -34,12 +34,23 @@
                         >
                     </li>
                     <li
-                        class="nav-item my-2 text-center">
-                        <button
-                            @click="navbarOpen = false;authStore.logout();"
-                            class="nav-link"
-                            >Logout</button
+                        class="my-2 text-center btn btn-primary px-0">
+                        <RouterLink
+                            @click="navbarOpen = false"
+                            :to="{name:'upload'}"
+                            class="text-white upload-btn"
+                            ><i class="bi bi-cloud-arrow-up-fill"></i> Upload</RouterLink
                         >
+                    </li>
+                    <li class="nav-item my-2 text-center">
+                        <button
+                            @click="
+                                navbarOpen = false;
+                                authStore.logout();
+                            "
+                            class="nav-link">
+                            Logout
+                        </button>
                     </li>
                 </ul>
             </div>
