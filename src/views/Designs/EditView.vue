@@ -205,8 +205,6 @@
             const res = await request("/api/designs/" + design_id);
             const data = await res.json();
 
-            console.log(res);
-
             if (res.ok) {
                 design.value = data.data;
             } else {
@@ -228,6 +226,8 @@
             });
 
             form.value.tags = design.value.tags_list?.tag || [];
+
+            form.value.is_live = Boolean(design.value.is_live);
 
             if (design.value.team) {
                 form.value.team = design.value.team.id;
@@ -262,9 +262,8 @@
                 if (form.value.assign_to_team === false) {
                     form.value.team = null;
                 } */
-                router.push("/dashboard");
+                router.push("/designs");
             }
-            console.log(data, res);
 
             isSubmitting.value = false;
         } catch (error) {

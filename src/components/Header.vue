@@ -1,6 +1,6 @@
 <template>
     <header
-        class="header bg-light padding-wrapper pt-2 pb-2"
+        class="header bg-light pt-2 pb-2"
         :class="navbarOpen ? 'navbar-open' : ''">
         <nav class="navbar navbar-light navbar-expand-sm">
             <div class="container-xl">
@@ -22,6 +22,15 @@
                     </li>
                 </ul>
                 <ul class="nav-list" v-else>
+                    <li class="my-2 text-center btn btn-primary px-0">
+                        <RouterLink
+                            @click="navbarOpen = false"
+                            :to="{ name: 'upload' }"
+                            class="text-white upload-btn"
+                            ><i class="bi bi-cloud-arrow-up-fill"></i>
+                            Upload</RouterLink
+                        >
+                    </li>
                     <li
                         v-for="item in menu_auth"
                         :key="item.name"
@@ -31,15 +40,6 @@
                             :to="item.to"
                             class="nav-link"
                             >{{ item.name }}</RouterLink
-                        >
-                    </li>
-                    <li
-                        class="my-2 text-center btn btn-primary px-0">
-                        <RouterLink
-                            @click="navbarOpen = false"
-                            :to="{name:'upload'}"
-                            class="text-white upload-btn"
-                            ><i class="bi bi-cloud-arrow-up-fill"></i> Upload</RouterLink
                         >
                     </li>
                     <li class="nav-item my-2 text-center">
@@ -70,12 +70,12 @@
         { name: "Login", to: "/login" },
         { name: "Register", to: "/register" },
     ]);
-    const menu_auth = ref([]);
+    const menu_auth = ref([{ name: "Designs", to: "/designs" }]);
 </script>
 
 <style lang="scss" scoped>
     .header {
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px 0px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
     .nav-link {
         color: rgb(13, 12, 34);

@@ -57,6 +57,12 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue')
     },
     {
+      path: '/designs',
+      name: 'designs',
+      beforeEnter: [auth],
+      component: () => import('../views/Designs/IndexView.vue')
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFoundView
