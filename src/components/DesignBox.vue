@@ -2,7 +2,7 @@
     <div class="design-box">
         <div class="design-box__top">
             <a href="#" class="design-box__top-link">
-                <img src="https://cdn.dribbble.com/users/22069/screenshots/16815570/media/0b5e4333f2c1d7088e550b40e91ec779.jpg?compress=1&resize=320x240&vertical=top"
+                <img :src="design.images[0]"
                     alt="design thumbnail" />
                 <div class="design-box__overlay">
                 </div>
@@ -15,14 +15,14 @@
             <div class="row d-flex align-items-center">
                 <div class="col-8">
                     <a href="#" class="design-box__title">
-                        <h2>Lorem ipsum dolor sit amet.</h2>
+                        <h2>{{ design.title }}</h2>
                     </a>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-end">
                     <div class="design-box__info">
                         <p class="m-0">
                             <i class="bi bi-heart"></i>
-                            <span class="icon-span">10</span>
+                            <span class="icon-span">{{design.likes}}</span>
                         </p>
                     </div>
                 </div>
@@ -31,16 +31,20 @@
         <div href="#" class="design-box__bottom">
             <a href="#" class="design-box__user">
                 <img src="https://www.gravatar.com/avatar/random@gmail.com/jpg?d=mm" alt="user avatar" />
-                <h3>username</h3>
+                <h3>{{design.user.name}}</h3>
             </a>
-            <p class="design-box__date">Jan 20, 2023</p>
+            <p class="design-box__date">{{design.created_at_human}}</p>
         </div>
     </div>
 </template>
 
+<script setup>
+defineProps(["design"]);
+</script>
+
 <style lang="scss" scoped>
 .design-box {
-    margin-bottom: 20px;
+    margin-bottom: 35px;
 
     &__top {
         z-index: 1;
@@ -124,6 +128,7 @@
 
     &__top {
         overflow: hidden;
+        height: 185px;
 
         &__top-link {
             display: block;

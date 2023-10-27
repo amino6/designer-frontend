@@ -4,7 +4,7 @@
         <SearchForm />
         <div class="row filter-section my-4">
             <div class="col filter-section__left d-none d-sm-flex">
-                <ul class="tags">
+                <!-- <ul class="tags">
                     <li class="tag active">
                         <RouterLink to="/" class="tag-item">tag 1</RouterLink>
                     </li>
@@ -17,45 +17,73 @@
                     <li class="tag">
                         <RouterLink to="/" class="tag-item">tag 1</RouterLink>
                     </li>
-                </ul>
+                </ul> -->
+                <button
+                    type="button"
+                    class="toggle-filters btn p-0"
+                    @click="show_filters = !show_filters">
+                    <i class="bi bi-filter"></i> Filters
+                </button>
             </div>
             <div class="col filter-section__right">
                 <FilterDropdown />
             </div>
+            <div
+                class="col-12 mt-4"
+                :class="{ 'd-block': show_filters, 'd-none': !show_filters }">
+                <FilterForm />
+            </div>
         </div>
         <div class="row">
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <DesignBox />
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <DesignBox />
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <DesignBox />
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <DesignBox />
+            <div
+                class="col-lg-3 col-md-4 col-sm-6 col-12"
+                v-for="design in searchStore.designs"
+                :key="design.id">
+                <DesignBox :design="design" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { onMounted } from "vue";
+    import { onMounted, ref } from "vue";
     import { RouterLink } from "vue-router";
     import SearchForm from "../components/SearchForm.vue";
     import FilterDropdown from "../components/FilterDropdown.vue";
     import DesignBox from "../components/DesignBox.vue";
+    import FilterForm from "../components/FilterForm.vue";
     import { useAuthStore } from "../stores/auth";
+    import { useSearchStore } from "../stores/search";
 
     const authStore = useAuthStore();
+    const searchStore = useSearchStore();
+
+    const show_filters = ref(false);
 
     onMounted(async () => {
         await authStore.getUser();
+        await searchStore.getDesigns();
     });
 </script>
 
 <style lang="scss" scoped>
+    .toggle-filters,
+    .toggle-filters:focus {
+        background: rgba(55, 80, 155, 0.1);
+        border-radius: 3px;
+        box-shadow: inset 0 0 0 1px rgba(55, 80, 155, 0.1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-evenly;
+        position: relative;
+        padding: 5px;
+        width: 100px;
+        cursor: pointer;
+    }
+
+    .toggle-filters:focus {
+        border: 1px solid #000;
+    }
     .primary-header {
         font-size: 50px;
         text-align: center;

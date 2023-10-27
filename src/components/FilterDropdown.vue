@@ -18,15 +18,33 @@
             </svg>
         </template>
         <template v-slot:content>
-            <AppDropdownItem :active="true">Latest</AppDropdownItem>
-            <AppDropdownItem>Most Liked</AppDropdownItem>
+            <AppDropdownItem
+                @click="searchStore.sortType = 0"
+                :active="searchStore.sortType === 0"
+                >Latest</AppDropdownItem
+            >
+            <AppDropdownItem
+                @click="searchStore.sortType = 1"
+                :active="searchStore.sortType === 1"
+                >Most Liked</AppDropdownItem
+            >
         </template>
     </AppDropdown>
 </template>
 
 <script setup>
+    import { ref, watch } from "vue";
     import AppDropdownItem from "./AppDropdownItem.vue";
     import AppDropdown from "./AppDropdown.vue";
+    import { useSearchStore } from "../stores/search";
+    import { storeToRefs } from "pinia";
+
+    const searchStore = useSearchStore();
+    const { sortType } = storeToRefs(searchStore);
+
+    watch(sortType, () => {
+        searchStore.getDesigns();
+    });
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,7 +1,7 @@
 <template>
     <div class="dopdown-wrapper" ref="target">
-        <div @click="toggle" class="toggler">
-            <slot name="toggler"> </slot>
+        <div @click="toggle" class="toggler btn">
+            <slot name="toggler"></slot>
         </div>
         <div v-if="active" class="dropdown-content" ref="content">
             <slot name="content"></slot>
@@ -30,7 +30,8 @@
 </script>
 
 <style lang="scss" scoped>
-    .toggler {
+    .toggler,
+    .toggler:focus {
         display: inline-block;
         background: rgba(55, 80, 155, 0.1);
         border-radius: 3px;
@@ -43,6 +44,9 @@
         width: 110px;
         cursor: pointer;
     }
+    /*.toggler:focus span {
+        border: 1px solid #000;
+    }*/
     .dopdown-wrapper {
         display: inline-block;
         position: relative;

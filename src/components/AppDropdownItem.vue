@@ -1,11 +1,11 @@
 <template>
-    <div class="dropdown-item" :class="props.active ? 'active' : ''">
+    <div class="dropdown-item" :class="active ? 'active' : ''">
         <slot />
     </div>
 </template>
 
 <script setup>
-    const props = defineProps(["active"]);
+    defineProps(["active"]);
 </script>
 
 <style lang="scss" scoped>

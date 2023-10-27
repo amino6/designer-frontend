@@ -1,7 +1,8 @@
 <template>
     <AppDropdown class="search-dropdown">
         <template v-slot:toggler>
-            <span>Designs</span>
+            <span v-if="searchType === 0">Designs</span>
+            <span v-if="searchType === 1">Designers</span>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -18,8 +19,12 @@
             </svg>
         </template>
         <template v-slot:content>
-            <AppDropdownItem :active="true">Designs</AppDropdownItem>
-            <AppDropdownItem>Designers</AppDropdownItem>
+            <AppDropdownItem @click="searchType = 0" :active="searchType === 0"
+                >Designs</AppDropdownItem
+            >
+            <AppDropdownItem @click="searchType = 1" :active="searchType === 1"
+                >Designers</AppDropdownItem
+            >
         </template>
     </AppDropdown>
 </template>
@@ -27,6 +32,9 @@
 <script setup>
     import AppDropdownItem from "./AppDropdownItem.vue";
     import AppDropdown from "./AppDropdown.vue";
+    import { ref } from "vue";
+
+    const searchType = ref(0);
 </script>
 
 <style lang="scss">

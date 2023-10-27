@@ -17,7 +17,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="design in designs" :key="design.id">
-                                <td style="max-width: 70px">
+                                <td style="max-width: 50px">
                                     <img
                                         :src="design.images[1]"
                                         alt="design image"
