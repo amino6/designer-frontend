@@ -1,5 +1,5 @@
 <template>
-    <form class="row g-3 align-items-center">
+    <form class="row g-3 align-items-center" @submit.prevent="">
         <div class="col-md-6">
             <label class="visually-hidden" for="tags">Tags</label>
             <div class="input-group">
@@ -10,7 +10,9 @@
                     type="text"
                     class="form-control"
                     id="tags"
-                    placeholder="Tags" />
+                    placeholder="Tags" 
+                    v-model="searchStore.tags"
+                    @keydown.enter="searchStore.getDesigns()"/>
             </div>
         </div>
 

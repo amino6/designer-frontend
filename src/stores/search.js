@@ -13,7 +13,8 @@ export const useSearchStore = defineStore('search', {
             has_team: null
         },
         searchType: "designs",
-        sortType: 0
+        sortType: 0,
+        tags: null
     }),
     getters: {
         searchUrl(state) {
@@ -37,7 +38,8 @@ export const useSearchStore = defineStore('search', {
                 q: state.searchData.q,
                 has_comments: state.searchData.has_comments,
                 has_team: state.searchData.has_team,
-                orderBy: state.sortType === 0 ? "latest" : "likes"
+                orderBy: state.sortType === 0 ? null : "likes",
+                tags: state.tags
             }
         }
     },
