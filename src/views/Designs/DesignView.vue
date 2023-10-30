@@ -24,41 +24,29 @@
                             >
                         </h1>
                         <ul class="list-unstyled comment-list">
-                            <li class="clearfix">
+                            <li
+                                class="clearfix"
+                                v-for="comment in design.comments">
                                 <div class="comment-thumb float-start">
                                     <a href="#">
                                         <img
-                                            src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
+                                            :src="comment.user.profile_image"
                                             class="neba img-fluid" />
                                     </a>
                                 </div>
                                 <div class="comment-meta">
                                     <h3 class="fs-5 fw-normal mb-2">
-                                        <a href="#" title="Neba">John D.</a>
-                                    </h3>
-                                    <p class="fs-6 fw-light mb-2">Great work</p>
-                                    <span class="fs-6 fw-light">
-                                        <a href="#">2 days ago</a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="comment-thumb float-start">
-                                    <a href="#">
-                                        <img
-                                            src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                                            class="neba img-fluid" />
-                                    </a>
-                                </div>
-                                <div class="comment-meta">
-                                    <h3 class="fs-5 fw-normal mb-2">
-                                        <a href="#" title="Neba">Neba</a>
+                                        <a
+                                            href="#"
+                                            :title="comment.user.name"
+                                            >{{ comment.user.name }}</a
+                                        >
                                     </h3>
                                     <p class="fs-6 fw-light mb-2">
-                                        Nice design mate!
+                                        {{ comment.body }}
                                     </p>
                                     <span class="fs-6 fw-light">
-                                        <a href="#">2 days ago</a>
+                                        <p>{{ comment.created_at_human }}</p>
                                     </span>
                                 </div>
                             </li>
@@ -89,15 +77,26 @@
                             </div>
                         </div>
                         <ul class="details-side-meta fs-6 fw-light px-3">
-                            <li class="d-table w-100 text-black" style="padding-bottom: 0">
+                            <li
+                                class="d-table w-100 text-black"
+                                style="padding-bottom: 0">
                                 <div class="stats-txt d-table-cell w-50">
-                                    <a href="" @click.prevent="like(design.id)" class="text-black" v-if="design.liked">
+                                    <a
+                                        href=""
+                                        @click.prevent="like(design.id)"
+                                        class="text-black"
+                                        v-if="design.liked">
                                         <span>
-                                            <i class="bi-heart-fill text-danger"></i>
+                                            <i
+                                                class="bi-heart-fill text-danger"></i>
                                         </span>
                                         Unlike
                                     </a>
-                                    <a href="" @click.prevent="like(design.id)" class="text-black" v-else>
+                                    <a
+                                        href=""
+                                        @click.prevent="like(design.id)"
+                                        class="text-black"
+                                        v-else>
                                         <span>
                                             <i class="bi-heart"></i>
                                         </span>
