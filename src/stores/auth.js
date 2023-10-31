@@ -22,6 +22,13 @@ export const useAuthStore = defineStore('auth', {
                 }
             }
         },
+        async refreshUser() {
+            const res = await request('/api/user');
+            const data = await res.json();
+            if (res.ok) {
+                this.authUser = data;
+            }
+        },
         async logout() {
             try {
                 await request("/logout", {
@@ -146,7 +153,89 @@ export const useAuthStore = defineStore('auth', {
             this.errors = {};
             this.isSubmitting = false;
             this.success = false;
-        }
+        },
+        async update_profile_info(form) {
+            this.isSubmitting = true;
+            this.errors = {};
+
+            try {
+                const res = await request("/user/profile-information", {
+                    method: "PUT",
+                    body: JSON.stringify(form),
+                });
+                const data = await res.json();
+
+                this.isSubmitting = false;
+
+                if (res.status !== 200) {
+                    if (data.errors) {
+                        this.errors = data.errors;
+                    } else {
+                        this.errors.message = data.message;
+                    }
+                } else {
+                    this.refreshUser();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            this.isSubmitting = false;
+        },
+        async update_password(form) {
+            this.isSubmitting = true;
+            this.errors = {};
+
+            try {
+                const res = await request("/user/password", {
+                    method: "PUT",
+                    body: JSON.stringify(form),
+                });
+                const data = await res.json();
+
+                this.isSubmitting = false;
+
+                if (res.status !== 200) {
+                    if (data.errors) {
+                        this.errors = data.errors;
+                    } else {
+                        this.errors.message = data.message;
+                    }
+                } else {
+                    this.refreshUser();
+                    return true;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            this.isSubmitting = false;
+        },
+        async update_about_info(form) {
+            this.isSubmitting = true;
+            this.errors = {};
+
+            try {
+                const res = await request("/api/user/settings", {
+                    method: "PUT",
+                    body: JSON.stringify(form),
+                });
+                const data = await res.json();
+
+                this.isSubmitting = false;
+
+                if (res.status !== 200) {
+                    if (data.errors) {
+                        this.errors = data.errors;
+                    } else {
+                        this.errors.message = data.message;
+                    }
+                } else {
+                    this.refreshUser();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            this.isSubmitting = false;
+        },
     },
     persist: true,
 })
