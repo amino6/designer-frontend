@@ -39,7 +39,7 @@
                 class="col-lg-3 col-md-4 col-sm-6 col-12"
                 v-for="design in searchStore.designs"
                 :key="design.id">
-                <DesignBox :design="design" />
+                <DesignBox :design="design" @like-design="like"/>
             </div>
         </div>
     </div>
@@ -52,6 +52,7 @@
     import FilterDropdown from "../components/FilterDropdown.vue";
     import DesignBox from "../components/DesignBox.vue";
     import FilterForm from "../components/FilterForm.vue";
+    import { like_design } from "../helpers/design";
     import { useAuthStore } from "../stores/auth";
     import { useSearchStore } from "../stores/search";
 
@@ -64,6 +65,11 @@
         await authStore.getUser();
         await searchStore.getDesigns();
     });
+
+    async function like(design_id) {
+        await like_design(design_id);
+        await searchStore.getDesigns();
+    }
 </script>
 
 <style lang="scss" scoped>

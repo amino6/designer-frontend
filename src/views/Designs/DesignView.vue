@@ -23,6 +23,38 @@
                                 Responses</strong
                             >
                         </h1>
+                        <div
+                            v-if="authStore.isLoggedIn"
+                            class="p-3 border-0"
+                            style="background-color: #f8f9fa">
+                            <form action="" @submit.prevent="post_comment">
+                                <div class="d-flex flex-start w-100">
+                                    <img
+                                        class="rounded-circle shadow-1-strong me-3"
+                                        :src="design.user.profile_image"
+                                        alt="avatar"
+                                        width="40"
+                                        height="40" />
+                                    <div class="form-outline w-100">
+                                        <textarea
+                                            v-model="comment_form.body"
+                                            class="form-control"
+                                            placeholder="Write a comment"
+                                            rows="4"
+                                            style="background: #fff"></textarea>
+                                    </div>
+                                </div>
+                                <div class="pt-3 d-flex justify-content-end">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary btn-sm"
+                                        :disabled="isLoading"
+                                        :class="{ disabled: isLoading }">
+                                        Post
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                         <ul class="list-unstyled comment-list">
                             <li
                                 class="clearfix"
@@ -42,12 +74,23 @@
                                             >{{ comment.user.name }}</a
                                         >
                                     </h3>
-                                    <p class="fs-6 fw-light mb-2">
+                                    <p class="fs-6 mb-2">
                                         {{ comment.body }}
                                     </p>
-                                    <span class="fs-6 fw-light">
-                                        <p>{{ comment.created_at_human }}</p>
+                                    <span class="fs-7 fw-light">
+                                        {{ comment.created_at_human }}
                                     </span>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        v-if="
+                                            design.user.id ===
+                                            authStore.user?.id
+                                        "
+                                        @click="delete_comment($event, comment.id)">
+                                        Delete
+                                    </button>
                                 </div>
                             </li>
                         </ul>
@@ -169,24 +212,86 @@
     import { onMounted, ref } from "vue";
     import { request } from "../../helpers/request";
     import { like_design } from "../../helpers/design";
+    import { useAuthStore } from "../../stores/auth";
 
     const route = useRoute();
+    const authStore = useAuthStore();
 
     const design = ref(null);
 
-    onMounted(async () => {
-        const res = await request("/api/designs/slug/" + route.params.slug);
-        const data = await res.json();
+    const comment_form = ref({
+        body: null,
+    });
 
-        design.value = data.data;
+    const isLoading = ref(false);
+
+    onMounted(async () => {
+        try {
+            const res = await request("/api/designs/slug/" + route.params.slug);
+            const data = await res.json();
+
+            design.value = data.data;
+        } catch (error) {
+            console.error(error);
+        }
     });
 
     async function like(design_id) {
-        await like_design(design_id);
-        const res = await request("/api/designs/slug/" + route.params.slug);
-        const data = await res.json();
+        try {
+            await like_design(design_id);
+            const res = await request("/api/designs/slug/" + route.params.slug);
+            const data = await res.json();
 
-        design.value = data.data;
+            design.value = data.data;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function post_comment() {
+        isLoading.value = true;
+        try {
+            const res = await request(
+                "/api/designs/" + design.value.id + "/comments",
+                {
+                    method: "POST",
+                    body: JSON.stringify(comment_form.value),
+                }
+            );
+            const data = await res.json();
+
+            if (res.ok) {
+                design.value.comments.unshift(data.data);
+                comment_form.value.body = null;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        isLoading.value = false;
+    }
+
+    async function delete_comment(e, comment_id) {
+        e.target.disabled = true;
+        e.target.classList.add("disabled");
+        try {
+            const res = await request(
+                "/api/designs/" + design.value.id + "/comments/" + comment_id,
+                {
+                    method: "DELETE",
+                }
+            );
+            const data = await res.json();
+
+            if (res.ok) {
+                design.value.comments = design.value.comments.filter(
+                    comment => comment.id !== comment_id
+                );
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        e.target.disabled = false;
+        e.target.classList.remove("disabled");
     }
 </script>
 

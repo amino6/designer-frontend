@@ -7,7 +7,9 @@
                 <img :src="design.images[0]" alt="design thumbnail" />
                 <div class="design-box__overlay"></div>
             </RouterLink>
-            <div class="like-icon" @click.stop="like(design.id)">
+            <div
+                class="like-icon"
+                @click.stop="$emit('like-design', design.id)">
                 <i class="bi bi-heart-fill text-danger" v-if="design.liked"></i>
                 <i class="bi bi-heart" v-else></i>
             </div>
@@ -23,7 +25,9 @@
                     class="col-4 d-flex align-items-center justify-content-end">
                     <div class="design-box__info">
                         <p class="m-0">
-                            <i class="bi bi-heart-fill text-danger" v-if="design.liked"></i>
+                            <i
+                                class="bi bi-heart-fill text-danger"
+                                v-if="design.liked"></i>
                             <i class="bi bi-heart" v-else></i>
                             <span class="icon-span">{{ design.likes }}</span>
                         </p>
@@ -32,30 +36,20 @@
             </div>
         </div>
         <div href="#" class="design-box__bottom">
-            <a href="#" class="design-box__user">
-                <img
-                    src="https://www.gravatar.com/avatar/random@gmail.com/jpg?d=mm"
-                    alt="user avatar" />
+            <RouterLink
+                :to="{ name: 'user-details', params: { id: design.user.id } }"
+                class="design-box__user">
+                <img :src="design.user.profile_image" alt="user avatar" />
                 <h3>{{ design.user.name }}</h3>
-            </a>
+            </RouterLink>
             <p class="design-box__date">{{ design.created_at_human }}</p>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { loadRouteLocation } from "vue-router";
-    import { like_design } from "../helpers/design";
-    import { useSearchStore } from "../stores/search";
-
-    const searchStore = useSearchStore();
-
     defineProps(["design"]);
-
-    async function like(design_id) {
-        await like_design(design_id);
-        await searchStore.getDesigns();
-    }
+    defineEmits(["like-design"]);
 </script>
 
 <style lang="scss" scoped>
@@ -98,7 +92,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 15px;
+            margin-top: 5px;
             margin-bottom: 15px;
 
             h3 {
