@@ -42,7 +42,7 @@
                 <DesignBox
                     :design="design"
                     @like-design="like"
-                    :isLoadingLike="isLoadingLike" />
+                    :currentlyLiking="currentlyLiking" />
             </div>
         </div>
         <div class="row" v-else>
@@ -72,7 +72,7 @@
     const searchStore = useSearchStore();
 
     const show_filters = ref(false);
-    const isLoadingLike = ref(false);
+    const currentlyLiking = ref([]);
 
     onMounted(async () => {
         await authStore.getUser();
@@ -81,10 +81,10 @@
     });
 
     async function like(design_id) {
-        isLoadingLike.value = true;
+        currentlyLiking.value.push(design_id);
         await like_design(design_id);
         await searchStore.search();
-        isLoadingLike.value = false;
+        currentlyLiking.value.splice(currentlyLiking.value.indexOf(design_id), 1);
     }
 </script>
 

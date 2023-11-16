@@ -10,7 +10,7 @@
             <div
                 class="like-icon"
                 @click.stop="$emit('like-design', design.id)">
-                <template v-if="!isLoadingLike">
+                <template v-if="!currentlyLiking.includes(design.id)">
                     <i
                         class="bi bi-heart-fill text-danger"
                         v-if="design.liked"></i>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-    defineProps(["design", "isLoadingLike"]);
+    defineProps(["design", "currentlyLiking"]);
     defineEmits(["like-design"]);
 </script>
 
