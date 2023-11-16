@@ -1,8 +1,8 @@
 <template>
     <AppDropdown class="search-dropdown">
         <template v-slot:toggler>
-            <span v-if="searchType === 0">Designs</span>
-            <span v-if="searchType === 1">Designers</span>
+            <span v-if="searchStore.searchType === 'designs'">Designs</span>
+            <span v-if="searchStore.searchType === 'designers'">Designers</span>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -18,11 +18,27 @@
                     d="m4.118 5.766 4 4.235 4-4.235"></path>
             </svg>
         </template>
-        <template v-slot:content>
-            <AppDropdownItem @click="searchType = 0" :active="searchType === 0"
+        <template #content="{ close }">
+            <AppDropdownItem
+                @click="
+                    if (searchStore.searchType !== 'designs') {
+                        searchStore.searchType = 'designs';
+                        search();
+                    }
+                    close();
+                "
+                :active="searchStore.searchType === 'designs'"
                 >Designs</AppDropdownItem
             >
-            <AppDropdownItem @click="searchType = 1" :active="searchType === 1"
+            <AppDropdownItem
+                @click="
+                    if (searchStore.searchType !== 'designers') {
+                        searchStore.searchType = 'designers';
+                        search();
+                    }
+                    close();
+                "
+                :active="searchStore.searchType === 'designers'"
                 >Designers</AppDropdownItem
             >
         </template>
@@ -32,9 +48,14 @@
 <script setup>
     import AppDropdownItem from "./AppDropdownItem.vue";
     import AppDropdown from "./AppDropdown.vue";
-    import { ref } from "vue";
+    import { useSearchStore } from "../stores/search";
 
-    const searchType = ref(0);
+    const searchStore = useSearchStore();
+
+    function search() {
+        searchStore.updateType();
+        searchStore.search();
+    }
 </script>
 
 <style lang="scss">

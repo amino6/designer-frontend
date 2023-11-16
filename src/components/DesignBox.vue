@@ -10,16 +10,63 @@
             <div
                 class="like-icon"
                 @click.stop="$emit('like-design', design.id)">
-                <i class="bi bi-heart-fill text-danger" v-if="design.liked"></i>
-                <i class="bi bi-heart" v-else></i>
+                <template v-if="!isLoadingLike">
+                    <i
+                        class="bi bi-heart-fill text-danger"
+                        v-if="design.liked"></i>
+                    <i class="bi bi-heart" v-else></i>
+                </template>
+                <template v-else>
+                    <svg
+                        width="38"
+                        height="38"
+                        stroke="#000"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="9.5"
+                                fill="none"
+                                stroke-width="3"
+                                stroke-linecap="round">
+                                <animate
+                                    attributeName="stroke-dasharray"
+                                    dur="1.5s"
+                                    calcMode="spline"
+                                    values="0 150;42 150;42 150;42 150"
+                                    keyTimes="0;0.475;0.95;1"
+                                    keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1"
+                                    repeatCount="indefinite" />
+                                <animate
+                                    attributeName="stroke-dashoffset"
+                                    dur="1.5s"
+                                    calcMode="spline"
+                                    values="0;-16;-59;-59"
+                                    keyTimes="0;0.475;0.95;1"
+                                    keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1"
+                                    repeatCount="indefinite" />
+                            </circle>
+                            <animateTransform
+                                attributeName="transform"
+                                type="rotate"
+                                dur="2s"
+                                values="0 12 12;360 12 12"
+                                repeatCount="indefinite" />
+                        </g>
+                    </svg>
+                </template>
             </div>
         </div>
         <div class="design-box__middle">
             <div class="row d-flex align-items-center">
                 <div class="col-8">
-                    <a href="#" class="design-box__title">
+                    <RouterLink
+                        :to="{ name: 'design', params: { slug: design.slug } }"
+                        class="design-box__title">
                         <h2>{{ design.title }}</h2>
-                    </a>
+                    </RouterLink>
                 </div>
                 <div
                     class="col-4 d-flex align-items-center justify-content-end">
@@ -48,7 +95,7 @@
 </template>
 
 <script setup>
-    defineProps(["design"]);
+    defineProps(["design", "isLoadingLike"]);
     defineEmits(["like-design"]);
 </script>
 

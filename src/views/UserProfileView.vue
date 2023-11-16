@@ -1,6 +1,5 @@
 <template>
     <div class="container mt-4 mb-4">
-        <h1>{{ authStore.user.name }}</h1>
         <div class="card my-4">
             <div class="card-header">
                 <h5 class="card-title my-1">Profile Information</h5>
@@ -97,6 +96,12 @@
                                 v-if="authStore.errors?.about">
                                 {{ authStore.errors?.about[0] }}
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="about" class="form-label"
+                                ><span>Location</span></label
+                            >
+                            <div id="map"></div>
                         </div>
                         <div class="text-start form-check mt-3 mb-2">
                             <input
@@ -203,6 +208,11 @@
 <script setup>
     import { onMounted, ref } from "vue";
     import { useAuthStore } from "../stores/auth";
+    /* 
+    import "leaflet/dist/leaflet.js"; */
+    import "leaflet/dist/leaflet.css";
+    import "leaflet-geosearch/dist/geosearch.css";
+    import * as GeoSearch from "leaflet-geosearch";
 
     const authStore = useAuthStore();
 
@@ -222,8 +232,8 @@
         available_to_hire: authStore.user.available_to_hire,
         formatted_address: authStore.user.formatted_address,
         location: {
-            latitude: authStore.user.location.coordinates[1],
-            longitude: authStore.user.location.coordinates[0],
+            latitude: authStore.user.location?.coordinates[1],
+            longitude: authStore.user.location?.coordinates[0],
         },
         tagline: authStore.user.tagline,
     });
@@ -269,7 +279,87 @@
 
     onMounted(() => {
         authStore.resetForm();
+
+        let lat = 51.505;
+        let lng = -0.09;
+
+        if (authStore.user.location != null) {
+            lat = authStore.user.location.coordinates[1];
+            lng = authStore.user.location.coordinates[0];
+        }
+
+        const map = L.map("map").setView([lat, lng], 13);
+
+        L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+        const searchControl = new GeoSearch.GeoSearchControl({
+            provider: new GeoSearch.OpenStreetMapProvider(),
+            style: "bar",
+            notFoundMessage: "Sorry, that address could not be found.",
+            searchLabel: "Enter a city",
+        });
+
+        let marker;
+
+        if (authStore.user.location != null) {
+            marker = L.marker([lat, lng]);
+
+            marker.bindPopup(authStore.user.formatted_address);
+
+            map.addLayer(marker);
+
+            marker.openPopup();
+        }
+
+        searchControl.markers.on("layeradd", function (e) {
+            const addedMarker = e.layer;
+            const coordinates = addedMarker.getLatLng();
+            let address = null;
+
+            if(marker) {
+                map.removeLayer(marker);
+            }
+
+            about_form.value.location.latitude = coordinates.lat;
+            about_form.value.location.longitude = coordinates.lng;
+
+            const [selected] = searchControl.resultList.results.filter(
+                el => el.x === coordinates.lng && el.y === coordinates.lat
+            );
+
+            if (selected) {
+                address = selected.label;
+                searchControl.searchElement.input.value = selected.label;
+            } else {
+                address = searchControl.searchElement.input.value;
+            }
+
+            about_form.value.formatted_address = address;
+        });
+
+        console.log(searchControl.markers);
+
+        if (
+            authStore.user.formatted_address &&
+            authStore.user.formatted_address !== ""
+        ) {
+            searchControl.searchElement.input.value =
+                authStore.user.formatted_address;
+        }
+
+        map.addControl(searchControl);
     });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+    #map {
+        height: 370px;
+    }
+    .leaflet-touch .leaflet-geosearch-bar form input {
+        height: 38px;
+        font-size: 17px;
+    }
+    .leaflet-touch .leaflet-control-geosearch button.reset {
+        line-height: 38px;
+    }
+</style>

@@ -34,12 +34,23 @@
                 <FilterForm />
             </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="searchStore.searchType === 'designs'">
             <div
                 class="col-lg-3 col-md-4 col-sm-6 col-12"
                 v-for="design in searchStore.designs"
                 :key="design.id">
-                <DesignBox :design="design" @like-design="like"/>
+                <DesignBox
+                    :design="design"
+                    @like-design="like"
+                    :isLoadingLike="isLoadingLike" />
+            </div>
+        </div>
+        <div class="row" v-else>
+            <div
+                class="col-lg-3 col-sm-6 col-12 mb-4"
+                v-for="designer in searchStore.designers"
+                :key="designer.id">
+                <DesignerBox :designer="designer"></DesignerBox>
             </div>
         </div>
     </div>
@@ -51,6 +62,7 @@
     import SearchForm from "../components/SearchForm.vue";
     import FilterDropdown from "../components/FilterDropdown.vue";
     import DesignBox from "../components/DesignBox.vue";
+    import DesignerBox from "../components/DesignerBox.vue";
     import FilterForm from "../components/FilterForm.vue";
     import { like_design } from "../helpers/design";
     import { useAuthStore } from "../stores/auth";
@@ -60,15 +72,19 @@
     const searchStore = useSearchStore();
 
     const show_filters = ref(false);
+    const isLoadingLike = ref(false);
 
     onMounted(async () => {
         await authStore.getUser();
-        await searchStore.getDesigns();
+        searchStore.updateState();
+        await searchStore.search();
     });
 
     async function like(design_id) {
+        isLoadingLike.value = true;
         await like_design(design_id);
-        await searchStore.getDesigns();
+        await searchStore.search();
+        isLoadingLike.value = false;
     }
 </script>
 

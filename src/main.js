@@ -4,6 +4,7 @@ import 'bootstrap'
 
 import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
+import { useRoute } from 'vue-router'
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
@@ -18,6 +19,7 @@ pinia.use(piniaPluginPersistedstate);
 
 pinia.use(({ store }) => {
     store.router = markRaw(router);
+    store.route = markRaw(useRoute())
 });
 
 app.use(pinia)

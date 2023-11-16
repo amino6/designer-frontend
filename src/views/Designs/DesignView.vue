@@ -88,7 +88,9 @@
                                             design.user.id ===
                                             authStore.user?.id
                                         "
-                                        @click="delete_comment($event, comment.id)">
+                                        @click="
+                                            delete_comment($event, comment.id)
+                                        ">
                                         Delete
                                     </button>
                                 </div>
@@ -108,9 +110,15 @@
                                             class="img-fluid rounded-circle" />
                                     </div>
                                     <div class="col-md-9">
-                                        <h5 class="card-title mb-1">
-                                            {{ design.user.name }}
-                                        </h5>
+                                        <RouterLink
+                                            :to="{
+                                                name: 'user-details',
+                                                params: { id: design.user.id },
+                                            }">
+                                            <h5 class="card-title mb-1">
+                                                {{ design.user.name }}
+                                            </h5>
+                                        </RouterLink>
                                         <p class="card-text">UI Designer</p>
                                     </div>
                                 </div>
@@ -129,9 +137,71 @@
                                         @click.prevent="like(design.id)"
                                         class="text-black"
                                         v-if="design.liked">
-                                        <span>
+                                        <span v-if="!isLoadingLike">
                                             <i
                                                 class="bi-heart-fill text-danger"></i>
+                                        </span>
+                                        <span v-if="isLoadingLike">
+                                            <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+                                            <svg
+                                                width="38"
+                                                height="38"
+                                                viewBox="0 0 38 38"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <defs>
+                                                    <linearGradient
+                                                        x1="8.042%"
+                                                        y1="0%"
+                                                        x2="65.682%"
+                                                        y2="23.865%"
+                                                        id="a">
+                                                        <stop
+                                                            stop-color="#000"
+                                                            stop-opacity="0"
+                                                            offset="0%" />
+                                                        <stop
+                                                            stop-color="#000"
+                                                            stop-opacity=".631"
+                                                            offset="63.146%" />
+                                                        <stop
+                                                            stop-color="#000"
+                                                            offset="100%" />
+                                                    </linearGradient>
+                                                </defs>
+                                                <g
+                                                    fill="none"
+                                                    fill-rule="evenodd">
+                                                    <g
+                                                        transform="translate(1 1)">
+                                                        <path
+                                                            d="M36 18c0-9.94-8.06-18-18-18"
+                                                            id="Oval-2"
+                                                            stroke="url(#a)"
+                                                            stroke-width="2">
+                                                            <animateTransform
+                                                                attributeName="transform"
+                                                                type="rotate"
+                                                                from="0 18 18"
+                                                                to="360 18 18"
+                                                                dur="0.9s"
+                                                                repeatCount="indefinite" />
+                                                        </path>
+                                                        <circle
+                                                            fill="#000"
+                                                            cx="36"
+                                                            cy="18"
+                                                            r="1">
+                                                            <animateTransform
+                                                                attributeName="transform"
+                                                                type="rotate"
+                                                                from="0 18 18"
+                                                                to="360 18 18"
+                                                                dur="0.9s"
+                                                                repeatCount="indefinite" />
+                                                        </circle>
+                                                    </g>
+                                                </g>
+                                            </svg>
                                         </span>
                                         Unlike
                                     </a>
@@ -140,8 +210,70 @@
                                         @click.prevent="like(design.id)"
                                         class="text-black"
                                         v-else>
-                                        <span>
+                                        <span v-if="!isLoadingLike">
                                             <i class="bi-heart"></i>
+                                        </span>
+                                        <span v-if="isLoadingLike">
+                                            <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+                                            <svg
+                                                width="38"
+                                                height="38"
+                                                viewBox="0 0 38 38"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <defs>
+                                                    <linearGradient
+                                                        x1="8.042%"
+                                                        y1="0%"
+                                                        x2="65.682%"
+                                                        y2="23.865%"
+                                                        id="a">
+                                                        <stop
+                                                            stop-color="#000"
+                                                            stop-opacity="0"
+                                                            offset="0%" />
+                                                        <stop
+                                                            stop-color="#000"
+                                                            stop-opacity=".631"
+                                                            offset="63.146%" />
+                                                        <stop
+                                                            stop-color="#000"
+                                                            offset="100%" />
+                                                    </linearGradient>
+                                                </defs>
+                                                <g
+                                                    fill="none"
+                                                    fill-rule="evenodd">
+                                                    <g
+                                                        transform="translate(1 1)">
+                                                        <path
+                                                            d="M36 18c0-9.94-8.06-18-18-18"
+                                                            id="Oval-2"
+                                                            stroke="url(#a)"
+                                                            stroke-width="2">
+                                                            <animateTransform
+                                                                attributeName="transform"
+                                                                type="rotate"
+                                                                from="0 18 18"
+                                                                to="360 18 18"
+                                                                dur="0.9s"
+                                                                repeatCount="indefinite" />
+                                                        </path>
+                                                        <circle
+                                                            fill="#000"
+                                                            cx="36"
+                                                            cy="18"
+                                                            r="1">
+                                                            <animateTransform
+                                                                attributeName="transform"
+                                                                type="rotate"
+                                                                from="0 18 18"
+                                                                to="360 18 18"
+                                                                dur="0.9s"
+                                                                repeatCount="indefinite" />
+                                                        </circle>
+                                                    </g>
+                                                </g>
+                                            </svg>
                                         </span>
                                         Like
                                     </a>
@@ -224,6 +356,7 @@
     });
 
     const isLoading = ref(false);
+    const isLoadingLike = ref(false);
 
     onMounted(async () => {
         try {
@@ -237,6 +370,7 @@
     });
 
     async function like(design_id) {
+        isLoadingLike.value = true;
         try {
             await like_design(design_id);
             const res = await request("/api/designs/slug/" + route.params.slug);
@@ -246,6 +380,7 @@
         } catch (error) {
             console.error(error);
         }
+        isLoadingLike.value = false;
     }
 
     async function post_comment() {

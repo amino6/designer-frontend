@@ -17,7 +17,7 @@
                     d="m4.118 5.766 4 4.235 4-4.235"></path>
             </svg>
         </template>
-        <template v-slot:content>
+        <template v-slot:content v-if="searchStore.searchType === 'designs'">
             <AppDropdownItem
                 @click="searchStore.sortType = 0"
                 :active="searchStore.sortType === 0"
@@ -27,6 +27,20 @@
                 @click="searchStore.sortType = 1"
                 :active="searchStore.sortType === 1"
                 >Most Liked</AppDropdownItem
+            >
+        </template>
+        <template v-slot:content v-else>
+            <AppDropdownItem
+                @click="searchStore.sortType = 0"
+                :active="searchStore.sortType === 0"
+                >Most Popular</AppDropdownItem
+            >
+            <AppDropdownItem
+                v-if="searchStore.searchData.latitude !== null &&
+                searchStore.searchData.longitude !== null"
+                @click="searchStore.sortType = 1"
+                :active="searchStore.sortType === 1"
+                >Nearest</AppDropdownItem
             >
         </template>
     </AppDropdown>
@@ -43,7 +57,7 @@
     const { sortType } = storeToRefs(searchStore);
 
     watch(sortType, () => {
-        searchStore.getDesigns();
+        searchStore.search();
     });
 </script>
 

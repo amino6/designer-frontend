@@ -22,7 +22,8 @@
     const searchStore = useSearchStore();
 
     function search() {
-        searchStore.getDesigns();
+        searchStore.updateType();
+        searchStore.search();
     }
 
     defineProps(["searchValue"]);
@@ -45,7 +46,7 @@
         z-index: 2;
 
         &:focus-within {
-            box-shadow: 0 4px 9px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.09)
         }
 
         input {

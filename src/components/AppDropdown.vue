@@ -4,7 +4,7 @@
             <slot name="toggler"></slot>
         </div>
         <div v-if="active" class="dropdown-content" ref="content">
-            <slot name="content"></slot>
+            <slot name="content" :close="close"></slot>
         </div>
     </div>
 </template>
@@ -18,6 +18,10 @@
 
     function toggle() {
         active.value = !active.value;
+    }
+
+    function close() {
+        active.value = false;
     }
 
     onMounted(() => {

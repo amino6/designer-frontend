@@ -1,5 +1,5 @@
 <template>
-    <div class="container-xl mt-4" v-if="user && user_designs">
+    <div class="container-xl mt-4" v-if="user">
         <div class="row mt-4">
             <div class="col-md-6 mx-auto">
                 <div class="card">
@@ -53,7 +53,7 @@
                 class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4"
                 v-for="design in user_designs"
                 :key="design.id">
-                <DesignBox :design="design" @like-design="like" />
+                <DesignBox :design="design" @like-design="like" :isLoadingLike="isLoadingLike"/>
             </div>
         </div>
     </div>
@@ -72,6 +72,7 @@
     const user_designs = ref(null);
     const user = ref(null);
     const likes_count = ref(0);
+    const isLoadingLike = ref(false);
 
     onMounted(async () => {
         try {
@@ -87,12 +88,14 @@
     });
 
     async function like(design_id) {
+        isLoadingLike.value = true;
         await like_design(design_id);
         const res = await request("/api/users/" + user_id + "/designs");
         const data = await res.json();
 
         user_designs.value = data[1];
         likes_count.value = data[2];
+        isLoadingLike.value = false;
     }
 </script>
 
