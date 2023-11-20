@@ -27,13 +27,17 @@
                                     <div class="d-flex gap-4">
                                         <div class="stats">
                                             <h6 class="mb-0">
-                                                Images: <span>{{user_designs.length}}</span>
+                                                Images:
+                                                <span>{{
+                                                    user_designs.length
+                                                }}</span>
                                             </h6>
                                         </div>
 
                                         <div class="stats">
                                             <h6 class="mb-0">
-                                                Likes: <span>{{likes_count}}</span>
+                                                Likes:
+                                                <span>{{ likes_count }}</span>
                                             </h6>
                                         </div>
                                     </div>
@@ -53,7 +57,10 @@
                 class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4"
                 v-for="design in user_designs"
                 :key="design.id">
-                <DesignBox :design="design" @like-design="like" :isLoadingLike="isLoadingLike"/>
+                <DesignBox
+                    :design="design"
+                    @like-design="like"
+                    :currentlyLiking="currentlyLiking" />
             </div>
         </div>
     </div>
@@ -72,7 +79,7 @@
     const user_designs = ref(null);
     const user = ref(null);
     const likes_count = ref(0);
-    const isLoadingLike = ref(false);
+    const currentlyLiking = ref([]);
 
     onMounted(async () => {
         try {
@@ -87,15 +94,32 @@
         }
     });
 
-    async function like(design_id) {
-        isLoadingLike.value = true;
-        await like_design(design_id);
+    async function like(design) {
+        currentlyLiking.value.push(design.id);
+        const like_res = await like_design(design.id);
         const res = await request("/api/users/" + user_id + "/designs");
         const data = await res.json();
 
         user_designs.value = data[1];
         likes_count.value = data[2];
-        isLoadingLike.value = false;
+
+        currentlyLiking.value.splice(
+            currentlyLiking.value.indexOf(design.id),
+            1
+        );
+
+        if (like_res.ok) {
+            // update design
+            if (design.liked) {
+                // dislike
+                design.liked = false;
+                design.likes--;
+            } else {
+                // like
+                design.liked = true;
+                design.likes++;
+            }
+        }
     }
 </script>
 

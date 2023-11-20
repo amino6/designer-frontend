@@ -63,7 +63,7 @@
                         <div class="alert alert-info p-2 mt-3" role="alert">
                             <p class="mb-0">
                                 The image dimensions must be atleast 800px x
-                                600px in size. The maximum image size is 2mb.
+                                600px in size. The maximum image size is 10mb.
                                 Please resize your image accordingly before you
                                 upload.
                             </p>
@@ -125,7 +125,7 @@
         post: "output",
         defaultInputName: "image",
         label: "Select or drop your image here",
-        maxFileSize: 2,
+        maxFileSize: 10,
     });
     const uploading = ref(false);
     const errors = ref(null);
@@ -146,11 +146,7 @@
         .slim {
             height: 100%;
         }
-    }
-</style>
 
-<style>
-    .footer {
-        margin-top: 180px !important;
+        margin-bottom: 250px;
     }
 </style>

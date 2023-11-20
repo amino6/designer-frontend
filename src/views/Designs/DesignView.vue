@@ -123,7 +123,9 @@
                                     </div>
                                 </div>
                                 <div class="rwo">
-                                    <p class="fw-light mt-4">13 days ago</p>
+                                    <p class="fw-light mt-4">
+                                        {{ design.created_at }}
+                                    </p>
                                 </div>
                             </div>
                         </div>

@@ -6,7 +6,7 @@ export const useSearchStore = defineStore('search', {
     state: () => ({
         designs: null,
         designers: null,
-        isSubmitting: false,
+        isLoading: true,
         success: false,
         searchData: {
             q: null,
@@ -21,14 +21,15 @@ export const useSearchStore = defineStore('search', {
         },
         searchType: "designs",
         sortType: 0,
-        tags: null
+        tags: null,
+        next_page: 1
     }),
     getters: {
         searchUrl(state) {
             if (state.searchType === "designs") {
-                return "/api/search/designs?";
+                return "/api/search/designs?page=" + state.next_page + "&";
             } else {
-                return "/api/search/designers?";
+                return "/api/search/designers?page=" + state.next_page + "&";
             }
         },
         searchQuery(state) {
@@ -67,28 +68,42 @@ export const useSearchStore = defineStore('search', {
                     longitude: state.searchData.longitude
                 }
             }
+        },
+        openDesignsFilter(state) {
+            return Boolean(state.tags || state.searchData.has_comments || state.searchData.has_team);
+        },
+        openDesignersFilter(state) {
+            return Boolean(state.searchData.available_to_hire || state.searchData.has_designs ||
+                (state.searchData.latitude && state.searchData.longitude));
         }
     },
     actions: {
-        async getDesigns() {
-            this.isSubmitting = true;
+        async getDesigns(load = false) {
             this.designers = null;
 
             try {
                 const res = await request(this.searchUrl + this.searchQuery);
 
                 const data = await res.json();
-                this.designs = data.data;
 
-                this.isSubmitting = false;
+                if (load) {
+                    Array.prototype.push.apply(this.designs, data.data);
+                } else {
+                    this.designs = data.data;
+                }
+                if (data.links?.next) {
+                    const page = data.links.next.match(/page=\d+/);
+                    this.next_page = page.length > 0 ? parseInt(page[0].split('=')[1]) : null;
+                }else {
+                    this.next_page = null;
+                }
             } catch (e) {
                 console.error(e);
             }
 
-            this.isSubmitting = false;
+            this.isLoading = false;
         },
-        async getDesigners() {
-            this.isSubmitting = true;
+        async getDesigners(load = false) {
             this.designs = null;
 
             try {
@@ -96,22 +111,51 @@ export const useSearchStore = defineStore('search', {
 
                 const data = await res.json();
 
-                this.designers = data.data;
-
-                this.isSubmitting = false;
+                if (load) {
+                    Array.prototype.push.apply(this.designers, data.data);
+                } else {
+                    this.designers = data.data;
+                }
+                if (data.links?.next) {
+                    const page = data.links.next.match(/page=\d+/);
+                    this.next_page = page.length > 0 ? parseInt(page[0].split('=')[1]) : null;
+                }else {
+                    this.next_page = null;
+                }
             } catch (e) {
                 console.error(e);
             }
 
-            this.isSubmitting = false;
+            this.isLoading = false;
         },
         async search() {
+            this.isLoading = true;
             if (this.searchType === "designs") {
                 await this.getDesigns();
             } else {
                 await this.getDesigners();
             }
+            this.isLoading = false;
             this.updateUrl();
+        },
+        async loadNextPage($state) {
+            $state.loading();
+
+            if (!this.next_page) {
+                $state.complete();
+                return;
+            }
+
+            try {
+                if (this.searchType === "designs") {
+                    await this.getDesigns(true);
+                } else {
+                    await this.getDesigners(true);
+                }
+                $state.loaded();
+            } catch (error) {
+                $state.error();
+            }
         },
         updateType() {
             if (this.searchType === "designs") {
@@ -153,7 +197,7 @@ export const useSearchStore = defineStore('search', {
             this.searchData.orderBy = null;
             this.searchData.has_designs = null;
             this.searchData.distance = null;
-            this.searchData.unit = "km";
+            this.searchData.unit = "Km";
             this.searchData.latitude = null;
             this.searchData.longitude = null;
             this.sortType = 0;

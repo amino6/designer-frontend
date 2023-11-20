@@ -9,7 +9,7 @@
             </RouterLink>
             <div
                 class="like-icon"
-                @click.stop="$emit('like-design', design.id)">
+                @click.stop="$emit('like-design', design)">
                 <template v-if="!currentlyLiking.includes(design.id)">
                     <i
                         class="bi bi-heart-fill text-danger"

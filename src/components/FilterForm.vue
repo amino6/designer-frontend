@@ -27,7 +27,7 @@
                     type="checkbox"
                     id="has_comments"
                     true-value="1"
-                    false-value="0"
+                    :false-value="null"
                     @change="searchStore.search()"
                     v-model="searchStore.searchData.has_comments" />
                 <label class="form-check-label px-2" for="has_comments">
@@ -44,7 +44,7 @@
                     type="checkbox"
                     id="has_team"
                     true-value="1"
-                    false-value="0"
+                    :false-value="null"
                     @change="searchStore.search()"
                     v-model="searchStore.searchData.has_team" />
                 <label class="form-check-label px-2" for="has_team">
@@ -122,7 +122,7 @@
                     type="checkbox"
                     id="has_comments"
                     true-value="1"
-                    false-value="0"
+                    :false-value="null"
                     @change="searchStore.search()"
                     v-model="searchStore.searchData.available_to_hire" />
                 <label class="form-check-label px-2" for="has_comments">
@@ -139,7 +139,7 @@
                     type="checkbox"
                     id="has_team"
                     true-value="1"
-                    false-value="0"
+                    :false-value="null"
                     @change="searchStore.search()"
                     v-model="searchStore.searchData.has_designs" />
                 <label class="form-check-label px-2" for="has_team">

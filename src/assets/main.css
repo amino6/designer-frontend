@@ -1756,10 +1756,6 @@ footer {
   header .navbar {
     height: auto;
   }
-  .navbar-brand {
-    position: relative; 
-    left: 8%;
-  }
   .navbar-toggler {
     margin-left: -118px;
   }
@@ -1876,9 +1872,6 @@ footer {
   .author-page .user-thumb {
     position: relative;
     top: -1px;
-  }
-  .navbar-brand {
-    left: 15%;
   }
   .wrapper {
     padding-bottom: 105px;

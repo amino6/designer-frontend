@@ -22,7 +22,6 @@
     const searchStore = useSearchStore();
 
     function search() {
-        searchStore.updateType();
         searchStore.search();
     }
 
