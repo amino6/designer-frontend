@@ -53,7 +53,9 @@
                         <InfiniteLoading
                             spinner="waveDots"
                             @infinite="loadDesigns">
-                            <span slot="no-more"></span>
+                            <template #complete>
+                                <span></span>
+                            </template>
                         </InfiniteLoading>
                     </div>
                 </template>

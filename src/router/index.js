@@ -79,6 +79,12 @@ const router = createRouter({
       component: () => import('../views/UserProfileView.vue')
     },
     {
+      path: '/liked',
+      name: 'liked-designs',
+      beforeEnter: [auth],
+      component: () => import('../views/LikedDesignsView.vue')
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFoundView

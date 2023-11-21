@@ -19,7 +19,7 @@
                             <tr v-for="design in designs" :key="design.id">
                                 <td style="max-width: 50px">
                                     <img
-                                        :src="design.images[1]"
+                                        :src="design.images['thumbnail']"
                                         alt="design image"
                                         style="
                                             width: 100%;
@@ -38,9 +38,15 @@
                                         :to="{
                                             name: 'designs-edit',
                                             params: { id: design.id },
-                                        }">
+                                        }"
+                                        class="btn btn-primary btn-sm">
                                         Edit
                                     </router-link>
+                                    <button
+                                        class="btn btn-danger btn-sm mx-2"
+                                        @click="init_delete(design.id)">
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -55,10 +61,15 @@
     import { onBeforeMount, ref } from "vue";
     import { request } from "../../helpers/request";
     import DesignBox from "../../components/DesignBox.vue";
+    import { delete_design } from "../../helpers/design";
 
     const designs = ref([]);
 
     onBeforeMount(async () => {
+        await fetchDesigns();
+    });
+
+    async function fetchDesigns() {
         try {
             const res = await request("/api/users/designs");
 
@@ -70,7 +81,14 @@
         } catch (error) {
             console.error(error);
         }
-    });
+    }
+
+    async function init_delete(design_id) {
+        if (confirm("are you sure ?")) {
+            await delete_design(design_id);
+            await fetchDesigns();
+        }
+    }
 </script>
 
 <style lang="scss" scoped></style>

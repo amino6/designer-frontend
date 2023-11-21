@@ -130,6 +130,7 @@ export const useSearchStore = defineStore('search', {
         },
         async search() {
             this.isLoading = true;
+            this.next_page = 1;
             if (this.searchType === "designs") {
                 await this.getDesigns();
             } else {
@@ -160,9 +161,11 @@ export const useSearchStore = defineStore('search', {
         updateType() {
             if (this.searchType === "designs") {
                 this.clearDesignersFields();
+                this.next_page = 1;
                 this.updateUrl();
             } else {
                 this.clearDesignsFields();
+                this.next_page = 1;
                 this.updateUrl();
             }
         },

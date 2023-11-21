@@ -55,6 +55,13 @@
                         <li class="mb-2">
                             <RouterLink
                                 class="dropdown-item d-flex gap-2"
+                                :to="{ name: 'liked-designs' }">
+                                Liked Designs
+                            </RouterLink>
+                        </li>
+                        <li class="mb-2">
+                            <RouterLink
+                                class="dropdown-item d-flex gap-2"
                                 :to="{ name: 'user-profile' }">
                                 Settings
                             </RouterLink>

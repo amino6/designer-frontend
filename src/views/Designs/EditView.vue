@@ -10,7 +10,8 @@
         <div class="container-xl mb-4 mt-4">
             <div class="row">
                 <div class="col-md-6">
-                    <img :src="design?.images[0]" alt="gear 5" />
+                    <img :src="design?.tmp_image ?? design?.images['large']" 
+                        :alt="design?.title ?? 'design image'" />
                 </div>
                 <div class="col-md-6">
                     <div class="card">

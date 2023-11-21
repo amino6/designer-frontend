@@ -6,7 +6,7 @@
                     <div class="post-detail">
                         <div class="single-img">
                             <img
-                                :src="design.images[0]"
+                                :src="design.images['large']"
                                 alt="Image"
                                 class="img-fluid" />
                         </div>

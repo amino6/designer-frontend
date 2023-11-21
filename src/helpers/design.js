@@ -6,3 +6,10 @@ export async function like_design(design_id) {
     });
     return res;
 }
+
+export async function delete_design(design_id) {
+    const res = await request("/api/designs/" + design_id, {
+        method: "DELETE"
+    });
+    return res;
+}

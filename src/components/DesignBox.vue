@@ -4,7 +4,7 @@
             <RouterLink
                 :to="{ name: 'design', params: { slug: design.slug } }"
                 class="design-box__top-link">
-                <img :src="design.images[0]" alt="design thumbnail" />
+                <img :src="design.images['large']" alt="design thumbnail" />
                 <div class="design-box__overlay"></div>
             </RouterLink>
             <div
