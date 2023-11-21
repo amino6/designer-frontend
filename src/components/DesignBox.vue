@@ -187,7 +187,7 @@
         &__top {
             overflow: hidden;
             border-radius: 10px;
-                border: 1px solid #d6d6d6;
+            border: 1px solid #d6d6d6;
             height: 185px;
 
             &__top-link {
@@ -257,7 +257,7 @@
             visibility: visible;
         }
     }
-    img[lazy=loading] {
-        filter: blur(10px) !important;
+    img[lazy="loading"] {
+        filter: blur(7px) !important;
     }
 </style>
