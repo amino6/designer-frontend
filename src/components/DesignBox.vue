@@ -4,12 +4,15 @@
             <RouterLink
                 :to="{ name: 'design', params: { slug: design.slug } }"
                 class="design-box__top-link">
-                <img :src="design.images['large']" alt="design thumbnail" />
+                <img
+                    v-lazy="{
+                        src: design.images['original'],
+                        loading: design.images['thumbnail'],
+                    }"
+                    alt="design thumbnail" />
                 <div class="design-box__overlay"></div>
             </RouterLink>
-            <div
-                class="like-icon"
-                @click.stop="$emit('like-design', design)">
+            <div class="like-icon" @click.stop="$emit('like-design', design)">
                 <template v-if="!currentlyLiking.includes(design.id)">
                     <i
                         class="bi bi-heart-fill text-danger"
@@ -110,8 +113,6 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                border-radius: 10px;
-                border: 1px solid #d6d6d6;
             }
         }
 
@@ -185,6 +186,8 @@
 
         &__top {
             overflow: hidden;
+            border-radius: 10px;
+                border: 1px solid #d6d6d6;
             height: 185px;
 
             &__top-link {
@@ -253,5 +256,8 @@
             opacity: 1;
             visibility: visible;
         }
+    }
+    img[lazy=loading] {
+        filter: blur(10px) !important;
     }
 </style>

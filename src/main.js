@@ -5,6 +5,7 @@ import 'bootstrap'
 import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
 import { useRoute } from 'vue-router'
+import VueLazyLoad from 'vue3-lazyload'
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
@@ -24,5 +25,6 @@ pinia.use(({ store }) => {
 
 app.use(pinia)
 app.use(router)
+app.use(VueLazyLoad)
 
 app.mount('#app')
