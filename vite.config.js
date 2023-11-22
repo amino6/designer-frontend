@@ -12,5 +12,8 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  assets: [
+    './node_modules/gridjs/dist/gridjs.js',
+  ],
 })

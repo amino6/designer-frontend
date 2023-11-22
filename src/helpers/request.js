@@ -38,3 +38,18 @@ export async function request(url, options, contentType = "application/json") {
         ...options,
     });
 }
+
+export async function getCSRFToken() {
+    // get cookie
+    let csrfToken = getCookie("XSRF-TOKEN");
+
+    if (!csrfToken) {
+        // get the cookie
+        await fetch("http://localhost:8000/sanctum/csrf-cookie", {
+            credentials: "include",
+        });
+        csrfToken = getCookie("XSRF-TOKEN");
+    }
+
+    return decodeURIComponent(csrfToken);
+}

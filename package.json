@@ -12,6 +12,7 @@
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.1",
+    "gridjs": "^5.1.0",
     "leaflet-geosearch": "^3.10.2",
     "pinia": "^2.1.6",
     "pinia-plugin-persistedstate": "^3.2.0",
