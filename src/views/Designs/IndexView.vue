@@ -113,6 +113,7 @@
                 "Title",
                 { name: "Status", sort: false },
                 "Likes",
+                "Tags",
                 {
                     name: "Actions",
                     id: "id",
@@ -250,6 +251,7 @@
                             title: design.title,
                             status: design.is_live ? "Published" : "Draft",
                             likes: design.likes,
+                            tags: design.tags_list.tag.join(','),
                             id: design.id,
                         };
                     });
@@ -272,7 +274,6 @@
 
         grid.render(document.getElementById("wrapper"));
     });
-
     async function refreshData() {
         const csrfToken = await getCSRFToken();
 
@@ -336,6 +337,7 @@
                             title: design.title,
                             status: design.is_live ? "Published" : "Draft",
                             likes: design.likes,
+                            tags: design.tags_list.tag.join(','),
                             id: design.id,
                         };
                     });
