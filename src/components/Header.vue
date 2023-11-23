@@ -38,6 +38,9 @@
                     <ul
                         class="dropdown-menu user-dropdown-menu"
                         aria-labelledby="userDropdown">
+                        <li class="dropdown-menu-top" @click.stop="">
+                            <h5>{{ authStore.user.name }}</h5>
+                        </li>
                         <li class="mb-2">
                             <RouterLink
                                 class="dropdown-item d-flex gap-2"
@@ -144,5 +147,12 @@
     button.dropdown-item:active {
         color: initial !important;
         background-color: initial !important;
+    }
+    .dropdown-menu-top {
+        margin-top: 8px;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #bdbdbd;
+        text-align: center;
     }
 </style>

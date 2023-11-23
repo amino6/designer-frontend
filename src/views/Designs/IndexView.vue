@@ -84,11 +84,13 @@
     const router = useRouter();
     const loading = ref(false);
     let grid = null;
+    let default_search_q = route.query?.q ?? null;
+    let reset_page = false;
+    let max_page_nbr = 1;
+    let delete_request = false;
 
     onBeforeMount(async () => {
         const csrfToken = await getCSRFToken();
-        let reset_page = false;
-        let default_search_q = route.query?.q ?? null;
 
         grid = new Grid({
             columns: [
@@ -149,7 +151,7 @@
                     url: (prev, keyword) => {
                         if (default_search_q) {
                             default_search_q = null;
-                        }else {
+                        } else {
                             reset_page = true;
                         }
 
@@ -169,14 +171,26 @@
                     url: (prev, page, limit) => {
                         const qIndex = prev.indexOf("?");
                         let n_page;
+
                         if (qIndex === -1) {
-                            n_page = reset_page ? 1 : page + 1;
+                            if (reset_page) {
+                                n_page = 1;
+                                page = 1;
+                            } else {
+                                n_page = page + 1;
+                            }
                             reset_page = false;
 
                             router.replace(`?page=${n_page}`);
                             return `${prev}?page=${n_page}`;
                         } else {
-                            n_page = reset_page ? 1 : page + 1;
+                            if (reset_page) {
+                                n_page = 1;
+                                page = 1;
+                            } else {
+                                n_page = page + 1;
+                            }
+
                             reset_page = false;
 
                             router.replace(
@@ -186,7 +200,6 @@
                         }
                     },
                 },
-                resetPageOnUpdate: true,
                 page: route.query?.page ? parseInt(route.query.page) - 1 : 0,
             },
             sort: {
@@ -225,8 +238,13 @@
                 },
                 credentials: "include",
                 url: "http://localhost:8000/api/users/designs",
-                then: data =>
-                    data.data.map(design => {
+                then: data => {
+                    if (data.data?.length === 1) {
+                        max_page_nbr = parseInt(data.meta.last_page) - 1;
+                    } else {
+                        max_page_nbr = parseInt(data.meta.last_page);
+                    }
+                    return data.data.map(design => {
                         return {
                             thumbnail: design.images["thumbnail"],
                             title: design.title,
@@ -234,7 +252,8 @@
                             likes: design.likes,
                             id: design.id,
                         };
-                    }),
+                    });
+                },
                 total: data => data.meta.total,
             },
             style: {
@@ -255,25 +274,110 @@
     });
 
     async function refreshData() {
-        try {
-            const res = await request("/api/users/designs");
+        const csrfToken = await getCSRFToken();
 
-            const data = await res.json();
+        grid.updateConfig({
+            pagination: {
+                limit: 10,
+                server: {
+                    url: (prev, page, limit) => {
+                        const qIndex = prev.indexOf("?");
+                        let n_page;
 
-            if (res.ok) {
-                grid.updateConfig({
-                    data: data.data,
-                }).forceRender();
-            }
-        } catch (error) {
-            console.error(error);
-        }
+                        if (qIndex === -1) {
+                            if (page + 1 > max_page_nbr) {
+                                page = max_page_nbr - 1;
+                            }
+
+                            n_page = page + 1;
+
+                            router.replace(`?page=${n_page}`);
+                            return `${prev}?page=${n_page}`;
+                        } else {
+                            if (page + 1 > max_page_nbr) {
+                                page = max_page_nbr - 1;
+                            }
+
+                            n_page = page + 1;
+
+                            router.replace(
+                                `${prev.slice(qIndex)}&page=${n_page}`
+                            );
+                            return `${prev}&page=${n_page}`;
+                        }
+                    },
+                },
+                page: route.query?.page
+                    ? parseInt(route.query.page) > max_page_nbr
+                        ? max_page_nbr - 1
+                        : parseInt(route.query.page) - 1
+                    : 0,
+            },
+            server: {
+                headers: {
+                    "content-Type": "application/json",
+                    accept: "application/json",
+                    "X-XSRF-TOKEN": csrfToken,
+                },
+                credentials: "include",
+                url: "http://localhost:8000/api/users/designs",
+                then: data => {
+                    if (data.data?.length === 1 && delete_request) {
+                        max_page_nbr = parseInt(data.meta.last_page) > 1 ? parseInt(data.meta.last_page) - 1 : 1;
+                    } else {
+                        max_page_nbr = parseInt(data.meta.last_page);
+                    }
+
+                    delete_request = false;
+
+                    return data.data.map(design => {
+                        return {
+                            thumbnail: design.images["thumbnail"],
+                            title: design.title,
+                            status: design.is_live ? "Published" : "Draft",
+                            likes: design.likes,
+                            id: design.id,
+                        };
+                    });
+                },
+                total: data => data.meta.total,
+            },
+            search: {
+                keyword: route.query?.q ?? null,
+                server: {
+                    url: (prev, keyword) => {
+                        if (default_search_q) {
+                            default_search_q = null;
+                        } else {
+                            reset_page = true;
+                        }
+
+                        if (delete_request) {
+                            reset_page = false;
+                        }
+
+                        if (prev.indexOf("?") === -1) {
+                            router.replace(`?q=${keyword}`);
+                            return `${prev}?q=${keyword}`;
+                        } else {
+                            router.replace(`&q=${keyword}`);
+                            return `${prev}&q=${keyword}`;
+                        }
+                    },
+                },
+            },
+        }).forceRender();
     }
 
     async function init_delete(design_id) {
         if (confirm("are you sure ?")) {
             loading.value = true;
-            await delete_design(design_id);
+            const res = await delete_design(design_id);
+
+            if (res.ok) {
+                delete_request = true;
+            }
+
             await refreshData();
             loading.value = false;
         }

@@ -6,7 +6,7 @@
                 class="design-box__top-link">
                 <img
                     v-lazy="{
-                        src: design.images['original'],
+                        src: design.images['large'],
                         loading: design.images['thumbnail'],
                     }"
                     alt="design thumbnail" />
@@ -103,11 +103,33 @@
 </script>
 
 <style lang="scss" scoped>
+    .icon-span {
+        margin-top: 1px;
+        margin-left: 5px;
+        display: inline-block;
+    }
+
     .design-box {
+        position: relative;
         margin-bottom: 35px;
 
         &__top {
+            overflow: hidden;
+            border-radius: 10px;
+            border: 1px solid #d6d6d6;
+            height: 275px;
             z-index: 1;
+
+            @media only screen and (min-width: 576px) {
+                
+            }
+
+            &__top-link {
+                display: block;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+            }
 
             img {
                 width: 100%;
@@ -116,24 +138,20 @@
             }
         }
 
-        &__info {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        &__title {
-            h2 {
-                color: #303030;
-                font-size: 14px;
-                margin-top: 10px;
-                margin-bottom: 10px;
-
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
+        &__overlay {
+            position: absolute;
+            top: 0;
+            bottom: 60%;
+            right: 0;
+            left: 0;
+            display: block;
+            background: linear-gradient(
+                to top,
+                transparent 20%,
+                rgba(0, 0, 0, 0.3) 100%
+            );
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
         }
 
         &__bottom {
@@ -148,8 +166,16 @@
             }
         }
 
+        &__info {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 12px;
+        }
+
         &__date {
             margin: 0;
+            font-size: 12px;
         }
 
         &__user {
@@ -170,48 +196,17 @@
             }
         }
 
-        &__date {
-            font-size: 12px;
-        }
-    }
+        &__title {
+            h2 {
+                color: #303030;
+                font-size: 14px;
+                margin-top: 10px;
+                margin-bottom: 10px;
 
-    .icon-span {
-        margin-top: 1px;
-        margin-left: 5px;
-        display: inline-block;
-    }
-
-    .design-box {
-        position: relative;
-
-        &__top {
-            overflow: hidden;
-            border-radius: 10px;
-            border: 1px solid #d6d6d6;
-            height: 185px;
-
-            &__top-link {
-                display: block;
-                width: 100%;
-                height: 100%;
-                z-index: 2;
+                &:hover {
+                    text-decoration: underline;
+                }
             }
-        }
-
-        &__overlay {
-            position: absolute;
-            top: 0;
-            bottom: 60%;
-            right: 0;
-            left: 0;
-            display: block;
-            background: linear-gradient(
-                to top,
-                transparent 20%,
-                rgba(0, 0, 0, 0.3) 100%
-            );
-            border-top-right-radius: 10px;
-            border-top-left-radius: 10px;
         }
 
         .like-icon {

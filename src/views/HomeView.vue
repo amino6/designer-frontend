@@ -41,7 +41,7 @@
             <div class="row" v-if="searchStore.searchType === 'designs'">
                 <template v-if="searchStore.designs.length > 0">
                     <div
-                        class="col-lg-3 col-md-4 col-sm-6 col-12"
+                        class="col-lg-4 col-md-4 col-sm-6 col-12"
                         v-for="design in searchStore.designs"
                         :key="design.id">
                         <DesignBox
