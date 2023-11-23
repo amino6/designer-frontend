@@ -4,9 +4,10 @@
             <div class="row mt-4">
                 <div class="col-md-8">
                     <div class="post-detail">
+                        <h2 class="h2 mb-4">{{ design.title }}</h2>
                         <div class="single-img">
                             <img
-                                :src="design.images['large']"
+                                :src="design.images['original']"
                                 alt="Image"
                                 class="img-fluid" />
                         </div>
@@ -285,53 +286,17 @@
                                     <p>{{ design.likes }} Likes</p>
                                 </div>
                             </li>
-
-                            <li class="d-table w-100">
-                                <div class="stats-txt d-table-cell w-100">
-                                    <a href="#" class="text-black">
-                                        More from {{ design.user.name }}
-                                    </a>
-                                </div>
-                            </li>
                         </ul>
-                        <div class="more-designs-outer pb-3">
-                            <ul class="more-designs row">
-                                <li class="col-md-6">
-                                    <a href="#">
-                                        <img
-                                            class="w-100 img-fluid"
-                                            src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                                            alt="Image" />
-                                    </a>
-                                </li>
-                                <li class="col-md-6">
-                                    <a href="#">
-                                        <img
-                                            class="w-100 img-fluid"
-                                            src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                                            alt="Image" />
-                                    </a>
-                                </li>
-                                <li class="col-md-6">
-                                    <a href="#">
-                                        <img
-                                            class="w-100 img-fluid"
-                                            src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                                            alt="Image" />
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                         <div class="designs-tag-outer mt-3">
-                            <h2 class="fs-6 fw-normal mb-2">Tags</h2>
-                            <div class="designs-tag fs-5">
-                                <a
-                                    href="#"
+                            <h2 class="fs-6 fw-normal mb-2 mx-3">Tags</h2>
+                            <div class="designs-tag fs-5 mx-3">
+                                <RouterLink
+                                    :to="{ name: 'home', query: { tags: tag } }"
                                     :title="tag"
                                     v-for="tag in design.tags_list.tag"
                                     :key="tag"
-                                    >{{ tag }}</a
-                                >
+                                    >{{ tag }}
+                                </RouterLink>
                             </div>
                         </div>
                     </div>
