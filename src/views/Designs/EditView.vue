@@ -10,7 +10,8 @@
         <div class="container-xl mb-4 mt-4">
             <div class="row">
                 <div class="col-md-6">
-                    <img :src="design?.tmp_image ?? design?.images['large']" 
+                    <img
+                        :src="design?.tmp_image ?? design?.images['large']"
                         :alt="design?.title ?? 'design image'" />
                 </div>
                 <div class="col-md-6">
@@ -56,6 +57,7 @@
                                         :class="{
                                             'is-invalid': errors?.description,
                                         }"
+                                        rows="5"
                                         id="description" />
                                     <div
                                         class="invalid-feedback"
@@ -63,54 +65,6 @@
                                         {{ errors?.description[0] }}
                                     </div>
                                 </div>
-                                <template v-if="user_teams">
-                                    <div class="mb-3 text-start form-check">
-                                        <input
-                                            v-model="form.assign_to_team"
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            :class="{
-                                                'is-invalid':
-                                                    errors?.assign_to_team,
-                                            }"
-                                            id="assign_to_team" />
-                                        <label
-                                            for="assign_to_team"
-                                            class="form-check-label"
-                                            >Assign to team</label
-                                        >
-                                        <div
-                                            class="invalid-feedback"
-                                            v-if="errors?.assign_to_team">
-                                            {{ errors?.assign_to_team[0] }}
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <select
-                                            class="form-select"
-                                            :class="{
-                                                'is-invalid': errors?.team,
-                                                disabled: !form.assign_to_team,
-                                            }"
-                                            :disabled="!form.assign_to_team"
-                                            v-model="form.team">
-                                            <option selected :value="null">
-                                                Select a team
-                                            </option>
-                                            <option
-                                                v-for="team in user_teams"
-                                                :key="team.id"
-                                                :value="team.id">
-                                                {{ team.name }}
-                                            </option>
-                                        </select>
-                                        <div
-                                            class="invalid-feedback"
-                                            v-if="errors?.team">
-                                            {{ errors?.team[0] }}
-                                        </div>
-                                    </div>
-                                </template>
                                 <div class="mb-3 text-start form-check">
                                     <input
                                         v-model="form.is_live"
@@ -138,6 +92,10 @@
                                         :class="{
                                             'is-invalid': errors?.tags,
                                         }"
+                                        :addTagOnKeys="[
+                                            13, // Enter
+                                            ',', // Comma ','
+                                        ]"
                                         id="tags"
                                         @on-tags-changed="handleChangeTag" />
                                     <div
@@ -178,29 +136,14 @@
         description: "",
         is_live: false,
         tags: [],
-        assign_to_team: false,
-        team: null,
     });
 
     const design = ref(null);
-    const user_teams = ref(null);
     const isSubmitting = ref(false);
     const errors = ref({});
     const success = ref(false);
 
     onBeforeMount(async () => {
-        try {
-            // fetch user teams
-            const teamsRes = await request("/api/users/teams");
-            const TeamsData = await teamsRes.json();
-
-            if (teamsRes.ok) {
-                user_teams.value = TeamsData.data;
-            }
-        } catch (error) {
-            console.error(error);
-        }
-
         try {
             // fetch designs
             const res = await request("/api/designs/" + design_id);
@@ -229,13 +172,6 @@
             form.value.tags = design.value.tags_list?.tag || [];
 
             form.value.is_live = Boolean(design.value.is_live);
-
-            if (design.value.team) {
-                form.value.team = design.value.team.id;
-                form.value.assign_to_team = true;
-            } else {
-                form.assign_to_team = false;
-            }
         }
     });
 
@@ -259,10 +195,6 @@
                 }
                 success.value = false;
             } else {
-                /* success.value = true;
-                if (form.value.assign_to_team === false) {
-                    form.value.team = null;
-                } */
                 router.push("/designs");
             }
 
