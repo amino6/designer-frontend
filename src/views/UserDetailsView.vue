@@ -12,7 +12,9 @@
                                     class="img-fluid rounded-circle" />
                             </div>
                             <div class="col-9">
-                                <h5 class="card-title mb-1 mt-3">
+                                <h5
+                                    class="card-title mb-1"
+                                    :class="{ 'mt-2': user.job_title == null }">
                                     {{ user.name }}
                                 </h5>
                                 <p class="card-text">
@@ -222,7 +224,7 @@
                     likes_count.value = likes_count.value + 1;
                 }
             }
-        }else {
+        } else {
             showModal.value = true;
         }
     }

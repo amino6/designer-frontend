@@ -25,7 +25,7 @@
         </div>
         <template v-if="!searchStore.isLoading">
             <div class="row" v-if="searchStore.searchType === 'designs'">
-                <template v-if="searchStore.designs.length > 0">
+                <template v-if="searchStore.designs?.length > 0">
                     <div
                         class="col-lg-4 col-md-4 col-sm-6 col-12"
                         v-for="design in searchStore.designs"
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="row" v-else>
-                <template v-if="searchStore.designers.length > 0">
+                <template v-if="searchStore.designers?.length > 0">
                     <div
                         class="col-lg-3 col-sm-6 col-12 mb-4"
                         v-for="designer in searchStore.designers"

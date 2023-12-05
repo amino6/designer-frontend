@@ -55,6 +55,24 @@
                                 {{ authStore.errors?.email[0] }}
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <label for="job_title" class="form-label"
+                                ><span>Job Title</span></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                :class="{
+                                    'is-invalid': authStore.errors?.job_title,
+                                }"
+                                id="job_title"
+                                v-model="profile_info_form.job_title" />
+                            <div
+                                class="invalid-feedback"
+                                v-if="authStore.errors?.job_title">
+                                {{ authStore.errors?.job_title[0] }}
+                            </div>
+                        </div>
                         <div class="flex items-center gap-4">
                             <button
                                 type="submit"
@@ -291,6 +309,7 @@
     const profile_info_form = ref({
         name: authStore.user.name,
         email: authStore.user.email,
+        job_title: authStore.user.job_title
     });
     const submitting_profile_info = ref(false);
 
