@@ -4,20 +4,6 @@
         <SearchForm />
         <div class="row filter-section my-4">
             <div class="col filter-section__left d-none d-sm-flex">
-                <!-- <ul class="tags">
-                    <li class="tag active">
-                        <RouterLink to="/" class="tag-item">tag 1</RouterLink>
-                    </li>
-                    <li class="tag">
-                        <RouterLink to="/" class="tag-item">tag 1</RouterLink>
-                    </li>
-                    <li class="tag">
-                        <RouterLink to="/" class="tag-item">tag 1</RouterLink>
-                    </li>
-                    <li class="tag">
-                        <RouterLink to="/" class="tag-item">tag 1</RouterLink>
-                    </li>
-                </ul> -->
                 <button
                     type="button"
                     class="toggle-filters btn p-0"
@@ -133,6 +119,9 @@
                 </svg>
             </div>
         </template>
+        <Teleport to="body">
+            <LoginRequiredModal :show="showModal" @close="showModal = false" />
+        </Teleport>
     </div>
 </template>
 
@@ -144,6 +133,7 @@
     import DesignBox from "../components/DesignBox.vue";
     import DesignerBox from "../components/DesignerBox.vue";
     import FilterForm from "../components/FilterForm.vue";
+    import LoginRequiredModal from "../components/LoginRequiredModal.vue";
     import { like_design } from "../helpers/design";
     import { useAuthStore } from "../stores/auth";
     import { useSearchStore } from "../stores/search";
@@ -156,6 +146,8 @@
     const show_filters = ref(false);
     const currentlyLiking = ref([]);
 
+    const showModal = ref(false);
+
     onMounted(async () => {
         await authStore.getUser();
         searchStore.updateState();
@@ -165,24 +157,28 @@
     });
 
     async function like(design) {
-        currentlyLiking.value.push(design.id);
-        const res = await like_design(design.id);
-        // display loader
-        currentlyLiking.value.splice(
-            currentlyLiking.value.indexOf(design.id),
-            1
-        );
-        if (res.ok) {
-            // update design
-            if (design.liked) {
-                // dislike
-                design.liked = false;
-                design.likes--;
-            } else {
-                // like
-                design.liked = true;
-                design.likes++;
+        if (authStore.isLoggedIn) {
+            currentlyLiking.value.push(design.id);
+            const res = await like_design(design.id);
+            // display loader
+            currentlyLiking.value.splice(
+                currentlyLiking.value.indexOf(design.id),
+                1
+            );
+            if (res.ok) {
+                // update design
+                if (design.liked) {
+                    // dislike
+                    design.liked = false;
+                    design.likes--;
+                } else {
+                    // like
+                    design.liked = true;
+                    design.likes++;
+                }
             }
+        }else {
+            showModal.value = true;
         }
     }
 

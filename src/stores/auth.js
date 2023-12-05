@@ -14,19 +14,29 @@ export const useAuthStore = defineStore('auth', {
     },
     actions: {
         async getUser() {
-            if (this.user === null) {
+            try {
+                const res = await request('/api/user');
+                const data = await res.json();
+                if (res.ok) {
+                    this.authUser = data;
+                }else {
+                    if(res.status === 401) {
+                        this.authUser = null;
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async refreshUser() {
+            try {
                 const res = await request('/api/user');
                 const data = await res.json();
                 if (res.ok) {
                     this.authUser = data;
                 }
-            }
-        },
-        async refreshUser() {
-            const res = await request('/api/user');
-            const data = await res.json();
-            if (res.ok) {
-                this.authUser = data;
+            } catch (error) {
+                console.error(error);
             }
         },
         async logout() {

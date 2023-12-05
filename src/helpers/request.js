@@ -21,22 +21,29 @@ export async function request(url, options, contentType = "application/json") {
     let headers;
     if (contentType === false) {
         headers = {
-            accept: "application/json",
+            Accept: "application/json",
             "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
         };
     } else {
         headers = {
-            "content-Type": contentType,
-            accept: "application/json",
+            "Content-Type": contentType,
+            Accept: "application/json",
             "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
         };
     }
 
-    return fetch(url, {
-        headers: headers,
-        credentials: "include",
-        ...options,
-    });
+    if (options) {
+        return fetch(url, {
+            headers: headers,
+            credentials: "include",
+            ...options,
+        });
+    }else {
+        return fetch(url, {
+            headers: headers,
+            credentials: "include",
+        });
+    }
 }
 
 export async function getCSRFToken() {

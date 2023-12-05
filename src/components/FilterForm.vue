@@ -42,13 +42,13 @@
                 <input
                     class="form-check-input"
                     type="checkbox"
-                    id="has_team"
+                    id="has_likes"
                     true-value="1"
                     :false-value="null"
                     @change="searchStore.search()"
-                    v-model="searchStore.searchData.has_team" />
-                <label class="form-check-label px-2" for="has_team">
-                    has team
+                    v-model="searchStore.searchData.has_likes" />
+                <label class="form-check-label px-2" for="has_likes">
+                    has likes
                 </label>
             </div>
         </div>
@@ -107,8 +107,8 @@
                         v-model="searchStore.searchData.unit"
                         class="form-select shadow-none bg-light border-0"
                         style="padding-left: 0; padding-right: 31px">
-                        <option>Km</option>
-                        <option>Mile</option>
+                        <option value="Km">Km</option>
+                        <option value="Mile">Mile</option>
                     </select>
                 </div>
             </div>
@@ -120,12 +120,12 @@
                 <input
                     class="form-check-input"
                     type="checkbox"
-                    id="has_comments"
+                    id="available_to_hire"
                     true-value="1"
                     :false-value="null"
                     @change="searchStore.search()"
                     v-model="searchStore.searchData.available_to_hire" />
-                <label class="form-check-label px-2" for="has_comments">
+                <label class="form-check-label px-2" for="available_to_hire">
                     available to hire
                 </label>
             </div>
@@ -137,12 +137,12 @@
                 <input
                     class="form-check-input"
                     type="checkbox"
-                    id="has_team"
+                    id="has_design"
                     true-value="1"
                     :false-value="null"
                     @change="searchStore.search()"
                     v-model="searchStore.searchData.has_designs" />
-                <label class="form-check-label px-2" for="has_team">
+                <label class="form-check-label px-2" for="has_design">
                     has designs
                 </label>
             </div>

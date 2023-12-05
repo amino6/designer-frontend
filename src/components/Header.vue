@@ -4,9 +4,9 @@
         :class="navbarOpen ? 'navbar-open' : ''">
         <nav class="navbar navbar-light navbar-expand-sm">
             <div class="container-xl">
-                <RouterLink to="/" class="navbar-brand">
+                <a href="/" class="navbar-brand">
                     DesignHouse
-                </RouterLink>
+                </a>
 
                 <ul class="nav-list" v-if="authStore.user === null">
                     <li
@@ -91,8 +91,10 @@
     import { ref } from "vue";
     import { RouterLink } from "vue-router";
     import { useAuthStore } from "../stores/auth";
+    import { useSearchStore } from "../stores/search";
 
     const authStore = useAuthStore();
+    const searchStore = useSearchStore();
 
     const navbarOpen = ref(false);
     const menu_guest = ref([

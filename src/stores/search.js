@@ -11,7 +11,7 @@ export const useSearchStore = defineStore('search', {
         searchData: {
             q: null,
             has_comments: null,
-            has_team: null,
+            has_likes: null,
             available_to_hire: null,
             has_designs: null,
             unit: "Km",
@@ -22,7 +22,7 @@ export const useSearchStore = defineStore('search', {
         searchType: "designs",
         sortType: 0,
         tags: null,
-        next_page: 1
+        next_page: 1,
     }),
     getters: {
         searchUrl(state) {
@@ -52,7 +52,7 @@ export const useSearchStore = defineStore('search', {
                 return {
                     q: state.searchData.q,
                     has_comments: state.searchData.has_comments,
-                    has_team: state.searchData.has_team,
+                    has_likes: state.searchData.has_likes,
                     orderBy: state.sortType === 0 ? null : "likes",
                     tags: state.tags
                 }
@@ -70,7 +70,7 @@ export const useSearchStore = defineStore('search', {
             }
         },
         openDesignsFilter(state) {
-            return Boolean(state.tags || state.searchData.has_comments || state.searchData.has_team);
+            return Boolean(state.tags || state.searchData.has_comments || state.searchData.has_likes);
         },
         openDesignersFilter(state) {
             return Boolean(state.searchData.available_to_hire || state.searchData.has_designs ||
@@ -94,7 +94,7 @@ export const useSearchStore = defineStore('search', {
                 if (data.links?.next) {
                     const page = data.links.next.match(/page=\d+/);
                     this.next_page = page.length > 0 ? parseInt(page[0].split('=')[1]) : null;
-                }else {
+                } else {
                     this.next_page = null;
                 }
             } catch (e) {
@@ -119,7 +119,7 @@ export const useSearchStore = defineStore('search', {
                 if (data.links?.next) {
                     const page = data.links.next.match(/page=\d+/);
                     this.next_page = page.length > 0 ? parseInt(page[0].split('=')[1]) : null;
-                }else {
+                } else {
                     this.next_page = null;
                 }
             } catch (e) {
@@ -184,9 +184,9 @@ export const useSearchStore = defineStore('search', {
         updateState() {
             this.searchData.q = this.route.query.q ?? this.q;
             this.searchData.has_comments = this.route.query.has_comments ?? this.searchData.has_comments;
-            this.searchData.has_team = this.route.query.has_team ?? this.searchData.has_team;
+            this.searchData.has_likes = this.route.query.has_likes ?? this.searchData.has_likes;
             this.searchData.available_to_hire = this.route.query.available_to_hire ?? this.searchData.available_to_hire;
-            this.searchData.unit = this.route.query.unit ?? "km";
+            this.searchData.unit = this.route.query.unit ?? "Km";
             this.searchData.distance = this.route.query.distance ?? this.searchData.distance;
             this.searchData.latitude = this.route.query.latitude ?? this.searchData.latitude;
             this.searchData.longitude = this.route.query.longitude ?? this.searchData.longitude;
@@ -208,9 +208,14 @@ export const useSearchStore = defineStore('search', {
         clearDesignsFields() {
             this.searchData.q = null;
             this.searchData.has_comments = null;
-            this.searchData.has_team = null;
+            this.searchData.has_likes = null;
             this.sortType = 0;
             this.tags = null;
+        },
+        async resetAll() {
+            this.clearDesignersFields();
+            this.clearDesignsFields();
+            this.searchType = "designs";
         }
     },
 })

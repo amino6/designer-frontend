@@ -61,19 +61,26 @@
                                 class="clearfix"
                                 v-for="comment in design.comments">
                                 <div class="comment-thumb float-start">
-                                    <a href="#">
+                                    <RouterLink
+                                        :to="{
+                                            name: 'user-details',
+                                            params: { id: comment.user.id },
+                                        }">
                                         <img
                                             :src="comment.user.profile_image"
                                             class="neba img-fluid" />
-                                    </a>
+                                    </RouterLink>
                                 </div>
                                 <div class="comment-meta">
                                     <h3 class="fs-5 fw-normal mb-2">
-                                        <a
-                                            href="#"
+                                        <RouterLink
+                                            :to="{
+                                                name: 'user-details',
+                                                params: { id: comment.user.id },
+                                            }"
                                             :title="comment.user.name"
-                                            >{{ comment.user.name }}</a
-                                        >
+                                            >{{ comment.user.name }}
+                                        </RouterLink>
                                     </h3>
                                     <p class="fs-6 mb-2">
                                         {{ comment.body }}
@@ -86,7 +93,7 @@
                                     <button
                                         class="btn btn-danger btn-sm"
                                         v-if="
-                                            design.user.id ===
+                                            comment.user.id ===
                                             authStore.user?.id
                                         "
                                         @click="
@@ -304,6 +311,52 @@
             </div>
         </div>
     </section>
+    <section v-else>
+        <div id="loading">
+            <svg
+                width="38"
+                height="38"
+                stroke="#000"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="9.5"
+                        fill="none"
+                        stroke-width="3"
+                        stroke-linecap="round">
+                        <animate
+                            attributeName="stroke-dasharray"
+                            dur="1.5s"
+                            calcMode="spline"
+                            values="0 150;42 150;42 150;42 150"
+                            keyTimes="0;0.475;0.95;1"
+                            keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1"
+                            repeatCount="indefinite" />
+                        <animate
+                            attributeName="stroke-dashoffset"
+                            dur="1.5s"
+                            calcMode="spline"
+                            values="0;-16;-59;-59"
+                            keyTimes="0;0.475;0.95;1"
+                            keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1"
+                            repeatCount="indefinite" />
+                    </circle>
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        dur="1s"
+                        values="0 12 12;360 12 12"
+                        repeatCount="indefinite" />
+                </g>
+            </svg>
+        </div>
+    </section>
+    <Teleport to="body">
+        <LoginRequiredModal :show="showModal" @close="showModal = false" />
+    </Teleport>
 </template>
 
 <script setup>
@@ -312,11 +365,13 @@
     import { request } from "../../helpers/request";
     import { like_design } from "../../helpers/design";
     import { useAuthStore } from "../../stores/auth";
+    import LoginRequiredModal from "../../components/LoginRequiredModal.vue";
 
     const route = useRoute();
     const authStore = useAuthStore();
 
     const design = ref(null);
+    const showModal = ref(false);
 
     const comment_form = ref({
         body: null,
@@ -337,17 +392,23 @@
     });
 
     async function like(design_id) {
-        isLoadingLike.value = true;
-        try {
-            await like_design(design_id);
-            const res = await request("/api/designs/slug/" + route.params.slug);
-            const data = await res.json();
+        if (authStore.isLoggedIn) {
+            isLoadingLike.value = true;
+            try {
+                await like_design(design_id);
+                const res = await request(
+                    "/api/designs/slug/" + route.params.slug
+                );
+                const data = await res.json();
 
-            design.value = data.data;
-        } catch (error) {
-            console.error(error);
+                design.value = data.data;
+            } catch (error) {
+                console.error(error);
+            }
+            isLoadingLike.value = false;
+        }else {
+            showModal.value = true;
         }
-        isLoadingLike.value = false;
     }
 
     async function post_comment() {
@@ -397,4 +458,15 @@
     }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+    #loading {
+        background-color: white;
+        text-align: center;
+        margin-top: 70px;
+        margin-bottom: 70px;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+        width: 100%;
+    }
+</style>

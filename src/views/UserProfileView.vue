@@ -69,6 +69,73 @@
         </div>
         <div class="card my-4">
             <div class="card-header">
+                <h5 class="card-title my-1">Contact Information</h5>
+            </div>
+            <div class="card-body">
+                <p class="mt-1 text-sm">
+                    This is how other people can contact you.
+                </p>
+                <section>
+                    <form
+                        class="mt-6 space-y-6"
+                        @submit.prevent="">
+                        <div
+                            class="mb-4 invalid-feedback d-block"
+                            v-if="authStore.errors?.message">
+                            {{ authStore.errors?.message }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label"
+                                ><span>Email</span></label
+                            >
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="email"
+                                :class="{
+                                    'is-invalid': authStore.errors?.email,
+                                }"
+                                required
+                                v-model="contact_info_form.email" />
+                            <div
+                                class="invalid-feedback"
+                                v-if="authStore.errors?.email">
+                                {{ authStore.errors?.email[0] }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="website" class="form-label"
+                                ><span>Website</span></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                :class="{
+                                    'is-invalid': authStore.errors?.website,
+                                }"
+                                id="website"
+                                required
+                                v-model="contact_info_form.website" />
+                            <div
+                                class="invalid-feedback"
+                                v-if="authStore.errors?.website">
+                                {{ authStore.errors?.website[0] }}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-sm"
+                                ref="update_profile_btn">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+        <div class="card my-4">
+            <div class="card-header">
                 <h5 class="card-title my-1">About Me</h5>
             </div>
             <div class="card-body">
@@ -208,8 +275,6 @@
 <script setup>
     import { onMounted, ref } from "vue";
     import { useAuthStore } from "../stores/auth";
-    /* 
-    import "leaflet/dist/leaflet.js"; */
     import "leaflet/dist/leaflet.css";
     import "leaflet-geosearch/dist/geosearch.css";
     import * as GeoSearch from "leaflet-geosearch";
@@ -236,6 +301,11 @@
             longitude: authStore.user.location?.coordinates[0],
         },
         tagline: authStore.user.tagline,
+    });
+
+    const contact_info_form = ref({
+        email: null,
+        website: null,
     });
 
     const update_profile_btn = ref(null);
@@ -336,8 +406,6 @@
 
             about_form.value.formatted_address = address;
         });
-
-        console.log(searchControl.markers);
 
         if (
             authStore.user.formatted_address &&
