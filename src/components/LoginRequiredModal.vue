@@ -4,7 +4,7 @@
             <div class="modal-container" @click.stop="">
                 <div class="modal-header">
                     <h3 class="w-100 text-bold text-center h3 text-black">
-                        To like a photo, please create an account.
+                        To like a design, please create an account.
                     </h3>
                 </div>
 

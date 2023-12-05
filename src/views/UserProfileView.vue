@@ -59,7 +59,9 @@
                             <button
                                 type="submit"
                                 class="btn btn-primary btn-sm"
-                                ref="update_profile_btn">
+                                ref="update_profile_btn"
+                                :disabled="submitting_profile_info"
+                                :class="{ disabled: submitting_profile_info }">
                                 Save
                             </button>
                         </div>
@@ -78,7 +80,7 @@
                 <section>
                     <form
                         class="mt-6 space-y-6"
-                        @submit.prevent="">
+                        @submit.prevent="update_contact_info">
                         <div
                             class="mb-4 invalid-feedback d-block"
                             v-if="authStore.errors?.message">
@@ -93,14 +95,14 @@
                                 class="form-control"
                                 id="email"
                                 :class="{
-                                    'is-invalid': authStore.errors?.email,
+                                    'is-invalid':
+                                        authStore.errors?.contact_email,
                                 }"
-                                required
-                                v-model="contact_info_form.email" />
+                                v-model="contact_info_form.contact_email" />
                             <div
                                 class="invalid-feedback"
-                                v-if="authStore.errors?.email">
-                                {{ authStore.errors?.email[0] }}
+                                v-if="authStore.errors?.contact_email">
+                                {{ authStore.errors?.contact_email[0] }}
                             </div>
                         </div>
                         <div class="mb-3">
@@ -111,22 +113,23 @@
                                 type="text"
                                 class="form-control"
                                 :class="{
-                                    'is-invalid': authStore.errors?.website,
+                                    'is-invalid': authStore.errors?.website_url,
                                 }"
                                 id="website"
-                                required
-                                v-model="contact_info_form.website" />
+                                v-model="contact_info_form.website_url" />
                             <div
                                 class="invalid-feedback"
-                                v-if="authStore.errors?.website">
-                                {{ authStore.errors?.website[0] }}
+                                v-if="authStore.errors?.website_url">
+                                {{ authStore.errors?.website_url[0] }}
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
                             <button
                                 type="submit"
                                 class="btn btn-primary btn-sm"
-                                ref="update_profile_btn">
+                                ref="update_profile_btn"
+                                :disabled="submitting_contact_info"
+                                :class="{ disabled: submitting_contact_info }">
                                 Save
                             </button>
                         </div>
@@ -187,7 +190,9 @@
                             <button
                                 type="submit"
                                 class="btn btn-primary btn-sm"
-                                ref="update_about_btn">
+                                ref="update_about_btn"
+                                :disabled="submitting_about"
+                                :class="{ disabled: submitting_about }">
                                 Save
                             </button>
                         </div>
@@ -261,7 +266,9 @@
                             <button
                                 type="submit"
                                 class="btn btn-primary btn-sm"
-                                ref="update_password_btn">
+                                ref="update_password_btn"
+                                :disabled="submitting_password"
+                                :class="{ disabled: submitting_password }">
                                 Save
                             </button>
                         </div>
@@ -285,12 +292,14 @@
         name: authStore.user.name,
         email: authStore.user.email,
     });
+    const submitting_profile_info = ref(false);
 
     const password_form = ref({
         current_password: null,
         password: null,
         password_confirmation: null,
     });
+    const submitting_password = ref(false);
 
     const about_form = ref({
         about: authStore.user.about,
@@ -302,29 +311,36 @@
         },
         tagline: authStore.user.tagline,
     });
+    const submitting_about = ref(false);
 
     const contact_info_form = ref({
-        email: null,
-        website: null,
+        contact_email: authStore.user.contact_email,
+        website_url: authStore.user.website_url,
     });
+    const submitting_contact_info = ref(false);
 
     const update_profile_btn = ref(null);
     const update_password_btn = ref(null);
     const update_about_btn = ref(null);
 
     async function update_profile_info() {
-        update_profile_btn.value.disabled = true;
-        update_profile_btn.value.classList.add("disabled");
-
+        submitting_profile_info.value = true;
+        
         await authStore.update_profile_info(profile_info_form.value);
+        
+        submitting_profile_info.value = false;
+    }
 
-        update_profile_btn.value.disabled = false;
-        update_profile_btn.value.classList.remove("disabled");
+    async function update_contact_info() {
+        submitting_contact_info.value = true;
+
+        await authStore.update_contact_info(contact_info_form.value);
+
+        submitting_contact_info.value = false;
     }
 
     async function update_password() {
-        update_password_btn.value.disabled = true;
-        update_password_btn.value.classList.add("disabled");
+        submitting_password.value = true;
 
         const res = await authStore.update_password(password_form.value);
         if (res === true) {
@@ -333,18 +349,15 @@
             password_form.value.password_confirmation = null;
         }
 
-        update_password_btn.value.disabled = false;
-        update_password_btn.value.classList.remove("disabled");
+        submitting_password.value = false;
     }
 
     async function update_about() {
-        update_about_btn.value.disabled = true;
-        update_about_btn.value.classList.add("disabled");
+        submitting_about.value = true;
 
         await authStore.update_about_info(about_form.value);
 
-        update_about_btn.value.disabled = false;
-        update_about_btn.value.classList.remove("disabled");
+        submitting_about.value = false;
     }
 
     onMounted(() => {
@@ -386,7 +399,7 @@
             const coordinates = addedMarker.getLatLng();
             let address = null;
 
-            if(marker) {
+            if (marker) {
                 map.removeLayer(marker);
             }
 

@@ -12,11 +12,13 @@
                                     class="img-fluid rounded-circle" />
                             </div>
                             <div class="col-9">
-                                <h5 class="card-title mb-1">
+                                <h5 class="card-title mb-1 mt-3">
                                     {{ user.name }}
                                 </h5>
                                 <p class="card-text">
-                                    UI Designer <br />
+                                    <span v-if="user.job_title">
+                                        {{ user.job_title }} <br />
+                                    </span>
                                     <span
                                         v-if="user.available_to_hire"
                                         class="badge bg-primary"

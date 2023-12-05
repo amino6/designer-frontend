@@ -165,7 +165,6 @@ export const useAuthStore = defineStore('auth', {
             this.success = false;
         },
         async update_profile_info(form) {
-            this.isSubmitting = true;
             this.errors = {};
 
             try {
@@ -174,8 +173,6 @@ export const useAuthStore = defineStore('auth', {
                     body: JSON.stringify(form),
                 });
                 const data = await res.json();
-
-                this.isSubmitting = false;
 
                 if (res.status !== 200) {
                     if (data.errors) {
@@ -189,10 +186,31 @@ export const useAuthStore = defineStore('auth', {
             } catch (e) {
                 console.error(e);
             }
-            this.isSubmitting = false;
+        },
+        async update_contact_info(form) {
+            this.errors = {};
+
+            try {
+                const res = await request("/api/user/contact-information", {
+                    method: "PUT",
+                    body: JSON.stringify(form),
+                });
+                const data = await res.json();
+
+                if (res.status !== 200) {
+                    if (data.errors) {
+                        this.errors = data.errors;
+                    } else {
+                        this.errors.message = data.message;
+                    }
+                } else {
+                    this.refreshUser();
+                }
+            } catch (e) {
+                console.error(e);
+            }
         },
         async update_password(form) {
-            this.isSubmitting = true;
             this.errors = {};
 
             try {
@@ -201,8 +219,6 @@ export const useAuthStore = defineStore('auth', {
                     body: JSON.stringify(form),
                 });
                 const data = await res.json();
-
-                this.isSubmitting = false;
 
                 if (res.status !== 200) {
                     if (data.errors) {
@@ -217,10 +233,8 @@ export const useAuthStore = defineStore('auth', {
             } catch (e) {
                 console.error(e);
             }
-            this.isSubmitting = false;
         },
         async update_about_info(form) {
-            this.isSubmitting = true;
             this.errors = {};
 
             try {
@@ -229,8 +243,6 @@ export const useAuthStore = defineStore('auth', {
                     body: JSON.stringify(form),
                 });
                 const data = await res.json();
-
-                this.isSubmitting = false;
 
                 if (res.status !== 200) {
                     if (data.errors) {
@@ -244,7 +256,6 @@ export const useAuthStore = defineStore('auth', {
             } catch (e) {
                 console.error(e);
             }
-            this.isSubmitting = false;
         },
     },
     persist: true,

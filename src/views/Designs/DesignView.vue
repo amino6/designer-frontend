@@ -127,7 +127,9 @@
                                                 {{ design.user.name }}
                                             </h5>
                                         </RouterLink>
-                                        <p class="card-text">UI Designer</p>
+                                        <p class="card-text">
+                                            {{ design.user.job_title }}
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="rwo">

@@ -14,7 +14,10 @@
                                 {{ authStore.errors?.message }}
                             </div>
 
-                            <div class="form-floating mb-2">
+                            <div class="mb-3">
+                                <label class="form-label" for="name"
+                                    >Name</label
+                                >
                                 <input
                                     v-model="form.name"
                                     type="text"
@@ -22,16 +25,17 @@
                                     :class="{
                                         'is-invalid': authStore.errors?.name,
                                     }"
-                                    id="name"
-                                    placeholder="name" />
-                                <label for="name">Name</label>
+                                    id="name" />
                                 <div
                                     class="invalid-feedback"
                                     v-if="authStore.errors?.name">
                                     {{ authStore.errors?.name[0] }}
                                 </div>
                             </div>
-                            <div class="form-floating mb-2">
+                            <div class="mb-3">
+                                <label class="form-label" for="email"
+                                    >Email address</label
+                                >
                                 <input
                                     v-model="form.email"
                                     type="email"
@@ -39,16 +43,17 @@
                                     :class="{
                                         'is-invalid': authStore.errors?.email,
                                     }"
-                                    id="email"
-                                    placeholder="email@example.com" />
-                                <label for="email">Email address</label>
+                                    id="email" />
                                 <div
                                     class="invalid-feedback"
                                     v-if="authStore.errors?.email">
                                     {{ authStore.errors?.email[0] }}
                                 </div>
                             </div>
-                            <div class="form-floating mb-2">
+                            <div class="mb-3">
+                                <label class="form-label" for="password"
+                                    >Password</label
+                                >
                                 <input
                                     v-model="form.password"
                                     type="password"
@@ -57,17 +62,19 @@
                                         'is-invalid':
                                             authStore.errors?.password,
                                     }"
-                                    id="password"
-                                    placeholder="Password" />
-                                <label for="password">Password</label>
+                                    id="password" />
                                 <div
                                     class="invalid-feedback"
                                     v-if="authStore.errors?.password">
                                     {{ authStore.errors?.password[0] }}
                                 </div>
                             </div>
-
-                            <div class="form-floating mb-2">
+                            <div class="mb-3">
+                                <label
+                                    class="form-label"
+                                    for="password_confirmation"
+                                    >Password Confirmation</label
+                                >
                                 <input
                                     v-model="form.password_confirmation"
                                     type="password"
@@ -77,11 +84,7 @@
                                             authStore.errors
                                                 ?.password_confirmation,
                                     }"
-                                    id="password_confirmation"
-                                    placeholder="Password" />
-                                <label for="password_confirmation"
-                                    >Password Confirmation</label
-                                >
+                                    id="password_confirmation" />
                                 <div
                                     :disabled="authStore.isSubmitting"
                                     class="invalid-feedback"
