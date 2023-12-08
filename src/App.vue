@@ -1,15 +1,42 @@
 <template>
     <div class="layout">
+        <vue-progress-bar></vue-progress-bar>
         <Header />
         <RouterView />
         <Footer />
     </div>
 </template>
 
-<script setup>
-    import { RouterLink, RouterView } from "vue-router";
+<script>
+    import { RouterView } from "vue-router";
     import Header from "./components/Header.vue";
     import Footer from "./components/Footer.vue";
+
+    export default {
+        mounted() {
+            this.$Progress.finish();
+        },
+        created() {
+            this.$Progress.start();
+
+            this.$router.beforeEach((to, from, next) => {
+                if (to.meta.progress !== undefined) {
+                    let meta = to.meta.progress;
+                    this.$Progress.parseMeta(meta);
+                }
+                this.$Progress.start();
+                next();
+            });
+            this.$router.afterEach((to, from) => {
+                this.$Progress.finish();
+            });
+        },
+        components: {
+            RouterView,
+            Header,
+            Footer,
+        },
+    };
 </script>
 
 <style>

@@ -143,7 +143,7 @@
     const errors = ref({});
     const success = ref(false);
 
-    onBeforeMount(async () => {
+    onMounted(async () => {
         try {
             // fetch designs
             const res = await request("/api/designs/" + design_id);

@@ -6,6 +6,7 @@ import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
 import { useRoute } from 'vue-router'
 import VueLazyLoad from 'vue3-lazyload'
+import VueProgressBar from "@aacassandra/vue3-progressbar"
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
@@ -16,6 +17,19 @@ const app = createApp(App)
 
 const pinia = createPinia();
 
+const options = {
+    color: "#4B5563",
+    failedColor: "#f00045",
+    thickness: "3px",
+    transition: {
+        speed: "0.2s",
+        termination: 300,
+    },
+    autoRevert: true,
+    location: "top",
+    inverse: false,
+};
+
 pinia.use(piniaPluginPersistedstate);
 
 pinia.use(({ store }) => {
@@ -24,6 +38,7 @@ pinia.use(({ store }) => {
 });
 
 app.use(pinia)
+app.use(VueProgressBar, options)
 app.use(router)
 app.use(VueLazyLoad)
 

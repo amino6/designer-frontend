@@ -41,30 +41,30 @@
                         <li class="dropdown-menu-top" @click.stop="">
                             <h5>{{ authStore.user.name }}</h5>
                         </li>
-                        <li class="mb-2">
+                        <li>
                             <RouterLink
-                                class="dropdown-item d-flex gap-2"
+                                class="pb-2 dropdown-item d-flex gap-2"
                                 :to="{ name: 'upload' }">
                                 Upload
                             </RouterLink>
                         </li>
-                        <li class="mb-2">
+                        <li>
                             <RouterLink
-                                class="dropdown-item d-flex gap-2"
+                                class="pb-2 dropdown-item d-flex gap-2"
                                 :to="{ name: 'designs' }">
                                 My Designs
                             </RouterLink>
                         </li>
-                        <li class="mb-2">
+                        <li>
                             <RouterLink
-                                class="dropdown-item d-flex gap-2"
+                                class="pb-2 dropdown-item d-flex gap-2"
                                 :to="{ name: 'liked-designs' }">
                                 Liked Designs
                             </RouterLink>
                         </li>
-                        <li class="mb-2">
+                        <li>
                             <RouterLink
-                                class="dropdown-item d-flex gap-2"
+                                class="pb-2 dropdown-item d-flex gap-2"
                                 :to="{ name: 'user-profile' }">
                                 Settings
                             </RouterLink>
