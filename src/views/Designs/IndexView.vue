@@ -78,16 +78,32 @@
     import { delete_design } from "../../helpers/design";
     import { Grid, h } from "gridjs";
     import { useRoute, useRouter } from "vue-router";
+    import { useToast } from "vue-toastification";
     import "gridjs/dist/theme/mermaid.css";
+    import "vue-toastification/dist/index.css";
 
     const route = useRoute();
     const router = useRouter();
     const loading = ref(false);
+    const toast = useToast();
+
     let grid = null;
     let default_search_q = route.query?.q ?? null;
     let reset_page = false;
     let max_page_nbr = 1;
     let delete_request = false;
+
+    if (route.query.success) {
+        toast.success("Design Updated Successfuly", {
+            timeout: 3000,
+        });
+    }
+
+    if (route.query.error) {
+        toast.error("Something Went Wrong", {
+            timeout: 3000,
+        });
+    }
 
     onBeforeMount(async () => {
         const csrfToken = await getCSRFToken();
@@ -251,7 +267,7 @@
                             title: design.title,
                             status: design.is_live ? "Published" : "Draft",
                             likes: design.likes,
-                            tags: design.tags_list.tag.join(','),
+                            tags: design.tags_list.tag.join(","),
                             id: design.id,
                         };
                     });
@@ -324,7 +340,10 @@
                 url: "http://localhost:8000/api/users/designs",
                 then: data => {
                     if (data.data?.length === 1 && delete_request) {
-                        max_page_nbr = parseInt(data.meta.last_page) > 1 ? parseInt(data.meta.last_page) - 1 : 1;
+                        max_page_nbr =
+                            parseInt(data.meta.last_page) > 1
+                                ? parseInt(data.meta.last_page) - 1
+                                : 1;
                     } else {
                         max_page_nbr = parseInt(data.meta.last_page);
                     }
@@ -337,7 +356,7 @@
                             title: design.title,
                             status: design.is_live ? "Published" : "Draft",
                             likes: design.likes,
-                            tags: design.tags_list.tag.join(','),
+                            tags: design.tags_list.tag.join(","),
                             id: design.id,
                         };
                     });

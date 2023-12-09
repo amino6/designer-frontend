@@ -303,13 +303,16 @@
     import "leaflet/dist/leaflet.css";
     import "leaflet-geosearch/dist/geosearch.css";
     import * as GeoSearch from "leaflet-geosearch";
+    import { useToast } from "vue-toastification";
+    import "vue-toastification/dist/index.css";
 
     const authStore = useAuthStore();
+    const toast = useToast();
 
     const profile_info_form = ref({
         name: authStore.user.name,
         email: authStore.user.email,
-        job_title: authStore.user.job_title
+        job_title: authStore.user.job_title,
     });
     const submitting_profile_info = ref(false);
 
@@ -344,9 +347,9 @@
 
     async function update_profile_info() {
         submitting_profile_info.value = true;
-        
+
         await authStore.update_profile_info(profile_info_form.value);
-        
+
         submitting_profile_info.value = false;
     }
 

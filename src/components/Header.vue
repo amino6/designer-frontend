@@ -44,28 +44,28 @@
                         <li>
                             <RouterLink
                                 class="pb-2 dropdown-item d-flex gap-2"
-                                :to="{ name: 'upload' }">
+                                :to="{ name: 'upload', force: true }">
                                 Upload
                             </RouterLink>
                         </li>
                         <li>
                             <RouterLink
                                 class="pb-2 dropdown-item d-flex gap-2"
-                                :to="{ name: 'designs' }">
+                                :to="{ name: 'designs', force: true }">
                                 My Designs
                             </RouterLink>
                         </li>
                         <li>
                             <RouterLink
                                 class="pb-2 dropdown-item d-flex gap-2"
-                                :to="{ name: 'liked-designs' }">
+                                :to="{ name: 'liked-designs', force: true }">
                                 Liked Designs
                             </RouterLink>
                         </li>
                         <li>
                             <RouterLink
                                 class="pb-2 dropdown-item d-flex gap-2"
-                                :to="{ name: 'user-profile' }">
+                                :to="{ name: 'user-profile', force: true }">
                                 Settings
                             </RouterLink>
                         </li>

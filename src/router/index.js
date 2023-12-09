@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import CreateView from '../views/Designs/CreateView.vue';
 import NotFoundView from '../views/NotFoundView.vue'
 import InternalErrorView from '../views/InternalErrorView.vue'
 
@@ -7,7 +8,7 @@ import guest from '../middleware/guest';
 import auth from '../middleware/auth';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -42,7 +43,7 @@ const router = createRouter({
       path: '/upload',
       name: 'upload',
       beforeEnter: [auth],
-      component: () => import('../views/Designs/CreateView.vue')
+      component: CreateView
     },
     {
       path: '/designs/:id/edit',

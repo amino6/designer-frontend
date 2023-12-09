@@ -6,7 +6,9 @@ import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
 import { useRoute } from 'vue-router'
 import VueLazyLoad from 'vue3-lazyload'
-import VueProgressBar from "@aacassandra/vue3-progressbar"
+import VueProgressBar from '@aacassandra/vue3-progressbar'
+import { useToast } from 'vue-toastification';
+import Toast from 'vue-toastification'
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
@@ -34,12 +36,14 @@ pinia.use(piniaPluginPersistedstate);
 
 pinia.use(({ store }) => {
     store.router = markRaw(router);
-    store.route = markRaw(useRoute())
+    store.route = markRaw(useRoute());
+    store.$toast = markRaw(useToast())
 });
 
 app.use(pinia)
 app.use(VueProgressBar, options)
 app.use(router)
 app.use(VueLazyLoad)
+app.use(Toast)
 
 app.mount('#app')

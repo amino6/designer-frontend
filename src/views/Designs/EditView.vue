@@ -127,8 +127,10 @@
     import { request } from "../../helpers/request";
     import { useRoute, useRouter } from "vue-router";
     import Vue3TagsInput from "vue3-tags-input";
+    import { useToast } from "vue-toastification";
 
     const router = useRouter();
+    const toast = useToast();
     const { id: design_id } = useRoute().params;
 
     const form = ref({
@@ -195,11 +197,12 @@
                 }
                 success.value = false;
             } else {
-                router.push("/designs");
+                router.push({ name: "designs", query: { success: true } });
             }
 
             isSubmitting.value = false;
         } catch (error) {
+            router.push({ name: "designs", query: { error: true } });
             console.error(error);
         }
     }

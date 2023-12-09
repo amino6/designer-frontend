@@ -19,8 +19,8 @@ export const useAuthStore = defineStore('auth', {
                 const data = await res.json();
                 if (res.ok) {
                     this.authUser = data;
-                }else {
-                    if(res.status === 401) {
+                } else {
+                    if (res.status === 401) {
                         this.authUser = null;
                     }
                 }
@@ -182,8 +182,14 @@ export const useAuthStore = defineStore('auth', {
                     }
                 } else {
                     this.refreshUser();
+                    this.$toast.success("Information Updated Successfuly", {
+                        timeout: 3000
+                    });
                 }
             } catch (e) {
+                this.$toast.error("Something Went Wrong", {
+                    timeout: 3000
+                });
                 console.error(e);
             }
         },
@@ -205,8 +211,14 @@ export const useAuthStore = defineStore('auth', {
                     }
                 } else {
                     this.refreshUser();
+                    this.$toast.success("Information Updated Successfuly", {
+                        timeout: 3000
+                    });
                 }
             } catch (e) {
+                this.$toast.error("Something Went Wrong", {
+                    timeout: 3000
+                });
                 console.error(e);
             }
         },
@@ -228,9 +240,15 @@ export const useAuthStore = defineStore('auth', {
                     }
                 } else {
                     this.refreshUser();
+                    this.$toast.success("Password Changed Successfuly", {
+                        timeout: 3000
+                    });
                     return true;
                 }
             } catch (e) {
+                this.$toast.error("Something Went Wrong", {
+                    timeout: 3000
+                });
                 console.error(e);
             }
         },
@@ -252,8 +270,14 @@ export const useAuthStore = defineStore('auth', {
                     }
                 } else {
                     this.refreshUser();
+                    this.$toast.success("Information Updated Successfuly", {
+                        timeout: 3000
+                    });
                 }
             } catch (e) {
+                this.$toast.error("Something Went Wrong", {
+                    timeout: 3000
+                });
                 console.error(e);
             }
         },
