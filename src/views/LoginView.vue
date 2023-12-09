@@ -5,7 +5,7 @@
                 class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                     <main class="form-signin w-100 m-auto">
-                        <form @submit.prevent="authStore.login(form)">
+                        <form @submit.prevent="login">
                             <h1 class="h1 mb-4">Sign in</h1>
 
                             <div
@@ -84,8 +84,12 @@
 <script setup>
     import { onMounted, ref } from "vue";
     import { useAuthStore } from "../stores/auth";
+    import { useRoute } from "vue-router";
 
     const authStore = useAuthStore();
+    const route = useRoute();
+
+    console.log(route.redirectedFrom);
 
     const form = ref({
         email: null,
@@ -96,6 +100,14 @@
     onMounted(() => {
         authStore.resetForm();
     });
+
+    function login() {
+        if(route.redirectedFrom) {
+            authStore.login(form.value, route.redirectedFrom.name);
+        }else {
+            authStore.login(form.value);
+        }
+    }
 </script>
 
 <style lang="scss" scoped></style>

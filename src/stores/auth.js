@@ -50,7 +50,7 @@ export const useAuthStore = defineStore('auth', {
                 console.error(e);
             }
         },
-        async login(form) {
+        async login(form, redirectTo = null) {
             this.isSubmitting = true;
             this.errors = {};
 
@@ -70,7 +70,11 @@ export const useAuthStore = defineStore('auth', {
                         this.errors.message = data.message;
                     }
                 } else {
-                    this.router.push("/");
+                    if (redirectTo) {
+                        this.router.push({ name: redirectTo });
+                    } else {
+                        this.router.push("/");
+                    }
                 }
             } catch (e) {
                 console.error(e);
