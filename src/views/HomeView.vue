@@ -130,7 +130,7 @@
     import { useSearchStore } from "../stores/search";
 
     export default {
-        async created() {
+        async beforeCreate() {
             const authStore = useAuthStore();
             const searchStore = useSearchStore();
 

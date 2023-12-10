@@ -11,6 +11,7 @@
     import { RouterView } from "vue-router";
     import Header from "./components/Header.vue";
     import Footer from "./components/Footer.vue";
+    import { useSearchStore } from "./stores/search";
 
     export default {
         mounted() {
@@ -20,6 +21,14 @@
             this.$Progress.start();
 
             this.$router.beforeEach((to, from, next) => {
+                const searchStore = useSearchStore();
+
+                if (to.name !== "home") {
+                    searchStore.replace_url = false;
+                }else {
+                    searchStore.replace_url = true;
+                }
+
                 if (to.meta.progress !== undefined) {
                     let meta = to.meta.progress;
                     this.$Progress.parseMeta(meta);

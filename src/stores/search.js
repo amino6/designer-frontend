@@ -23,6 +23,9 @@ export const useSearchStore = defineStore('search', {
         sortType: 0,
         tags: null,
         next_page: 1,
+        // the replace_url is a fix for when the user clicks on a routerlink
+        // if we run router.replace at the same time the page won't change
+        replace_url: true,
     }),
     getters: {
         searchUrl(state) {
@@ -175,6 +178,10 @@ export const useSearchStore = defineStore('search', {
             this.searchData.latitude = null;
         },
         updateUrl() {
+            if (!this.replace_url) {
+                return;
+            }
+
             if (this.searchType === "designs") {
                 this.router.replace("?" + this.searchQuery);
             } else {
