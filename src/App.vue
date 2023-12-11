@@ -25,7 +25,7 @@
 
                 if (to.name !== "home") {
                     searchStore.replace_url = false;
-                }else {
+                } else {
                     searchStore.replace_url = true;
                 }
 

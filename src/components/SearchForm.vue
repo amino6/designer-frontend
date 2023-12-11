@@ -44,8 +44,16 @@
         border: 1px solid #d6d6d6;
         z-index: 2;
 
+        @media only screen and (max-width: 767px) {
+            width: 80%;
+        }
+
+        @media only screen and (max-width: 470px) {
+            width: 100%;
+        }
+
         &:focus-within {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.09)
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.09);
         }
 
         input {

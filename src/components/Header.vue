@@ -157,4 +157,10 @@
         border-bottom: 1px solid #bdbdbd;
         text-align: center;
     }
+
+    .navbar-brand {
+        @media only screen and (max-width: 1023px) {
+            padding-left: 0;
+        }        
+    }
 </style>

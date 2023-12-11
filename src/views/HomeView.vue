@@ -3,7 +3,7 @@
         <h1 class="primary-header">Explore Designs And Designers</h1>
         <SearchForm />
         <div class="row filter-section my-4">
-            <div class="col filter-section__left d-none d-sm-flex">
+            <div class="col filter-section__left d-sm-flex">
                 <button
                     type="button"
                     class="toggle-filters btn p-0"
@@ -125,23 +125,8 @@
     </div>
 </template>
 
-<script>
-    import { useAuthStore } from "../stores/auth";
-    import { useSearchStore } from "../stores/search";
-
-    export default {
-        async beforeCreate() {
-            const authStore = useAuthStore();
-            const searchStore = useSearchStore();
-
-            await authStore.getUser();
-            await searchStore.search();
-        },
-    };
-</script>
-
 <script setup>
-    import { onBeforeMount, onMounted, ref } from "vue";
+    import { onBeforeMount, ref } from "vue";
     import SearchForm from "../components/SearchForm.vue";
     import FilterDropdown from "../components/FilterDropdown.vue";
     import DesignBox from "../components/DesignBox.vue";
@@ -162,10 +147,13 @@
 
     const showModal = ref(false);
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
+        searchStore.isLoading = true;
+        await authStore.getUser();
         searchStore.updateState();
         show_filters.value =
             searchStore.openDesignsFilter || searchStore.openDesignersFilter;
+        await searchStore.search();
     });
 
     async function like(design) {

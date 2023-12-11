@@ -1,7 +1,9 @@
 <template>
     <div class="container-xl mt-4" v-if="user">
         <div class="row mt-4">
-            <div class="col-md-6 mx-auto">
+            <div
+                class="col-12 mx-auto"
+                :class="user.about ? 'col-sm-8' : 'col-sm-6'">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -49,8 +51,25 @@
                             </div>
                         </div>
                         <div class="row mt-4">
-                            <h4 class="text-black">About:</h4>
-                            <p>{{ user.about }}</p>
+                            <div
+                                class="col-sm-4"
+                                v-if="user.contact_email || user.website_url">
+                                <h5 class="text-black">Contact Information:</h5>
+                                <p v-if="user.contact_email">
+                                    Email: <br />
+                                    {{ user.contact_email }}
+                                </p>
+                                <p v-if="user.website_url">
+                                    Website: <br />
+                                    <a :href="user.website_url" target="_blank">
+                                        {{ user.website_url }}
+                                    </a>
+                                </p>
+                            </div>
+                            <div class="col-sm-8" v-if="user.about">
+                                <h5 class="text-black">About:</h5>
+                                <p>{{ user.about }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

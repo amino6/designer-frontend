@@ -1,8 +1,8 @@
 <template>
     <section class="post-details mt-4 pb-5" v-if="design != null">
-        <div class="container">
+        <div class="container-xl">
             <div class="row mt-4">
-                <div class="col-md-8">
+                <div class="col-12 col-md-8">
                     <div class="post-detail">
                         <h2 class="h2 mb-4">{{ design.title }}</h2>
                         <div class="single-img">
@@ -16,6 +16,230 @@
                         <p>
                             {{ design.description }}
                         </p>
+                    </div>
+                    <!-- for mobile -->
+                    <div class="col-12 col-md-4 d-block d-md-none">
+                        <div class="post-detail-sidebar">
+                            <div class="card" style="border: 0">
+                                <div class="card-body pt-0">
+                                    <div class="row align-items-center">
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <img
+                                                        :src="
+                                                            design.user
+                                                                .profile_image
+                                                        "
+                                                        alt="User Image"
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="col-9">
+                                                    <RouterLink
+                                                        :to="{
+                                                            name: 'user-details',
+                                                            params: {
+                                                                id: design.user
+                                                                    .id,
+                                                            },
+                                                        }">
+                                                        <h5
+                                                            class="card-title mb-1">
+                                                            {{
+                                                                design.user.name
+                                                            }}
+                                                        </h5>
+                                                    </RouterLink>
+                                                    <p class="card-text">
+                                                        {{
+                                                            design.user
+                                                                .job_title
+                                                        }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="fw-light text-end mb-0">
+                                                {{ design.created_at }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="details-side-meta fs-6 fw-light px-3">
+                                <li
+                                    class="d-table w-100 text-black"
+                                    style="padding-bottom: 0">
+                                    <div class="stats-txt d-table-cell w-50">
+                                        <a
+                                            href=""
+                                            @click.prevent="like(design.id)"
+                                            class="text-black"
+                                            v-if="design.liked">
+                                            <span v-if="!isLoadingLike">
+                                                <i
+                                                    class="bi-heart-fill text-danger"></i>
+                                            </span>
+                                            <span v-if="isLoadingLike">
+                                                <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+                                                <svg
+                                                    width="38"
+                                                    height="38"
+                                                    viewBox="0 0 38 38"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <defs>
+                                                        <linearGradient
+                                                            x1="8.042%"
+                                                            y1="0%"
+                                                            x2="65.682%"
+                                                            y2="23.865%"
+                                                            id="a">
+                                                            <stop
+                                                                stop-color="#000"
+                                                                stop-opacity="0"
+                                                                offset="0%" />
+                                                            <stop
+                                                                stop-color="#000"
+                                                                stop-opacity=".631"
+                                                                offset="63.146%" />
+                                                            <stop
+                                                                stop-color="#000"
+                                                                offset="100%" />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <g
+                                                        fill="none"
+                                                        fill-rule="evenodd">
+                                                        <g
+                                                            transform="translate(1 1)">
+                                                            <path
+                                                                d="M36 18c0-9.94-8.06-18-18-18"
+                                                                id="Oval-2"
+                                                                stroke="url(#a)"
+                                                                stroke-width="2">
+                                                                <animateTransform
+                                                                    attributeName="transform"
+                                                                    type="rotate"
+                                                                    from="0 18 18"
+                                                                    to="360 18 18"
+                                                                    dur="0.9s"
+                                                                    repeatCount="indefinite" />
+                                                            </path>
+                                                            <circle
+                                                                fill="#000"
+                                                                cx="36"
+                                                                cy="18"
+                                                                r="1">
+                                                                <animateTransform
+                                                                    attributeName="transform"
+                                                                    type="rotate"
+                                                                    from="0 18 18"
+                                                                    to="360 18 18"
+                                                                    dur="0.9s"
+                                                                    repeatCount="indefinite" />
+                                                            </circle>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            Unlike
+                                        </a>
+                                        <a
+                                            href=""
+                                            @click.prevent="like(design.id)"
+                                            class="text-black"
+                                            v-else>
+                                            <span v-if="!isLoadingLike">
+                                                <i class="bi-heart"></i>
+                                            </span>
+                                            <span v-if="isLoadingLike">
+                                                <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+                                                <svg
+                                                    width="38"
+                                                    height="38"
+                                                    viewBox="0 0 38 38"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <defs>
+                                                        <linearGradient
+                                                            x1="8.042%"
+                                                            y1="0%"
+                                                            x2="65.682%"
+                                                            y2="23.865%"
+                                                            id="a">
+                                                            <stop
+                                                                stop-color="#000"
+                                                                stop-opacity="0"
+                                                                offset="0%" />
+                                                            <stop
+                                                                stop-color="#000"
+                                                                stop-opacity=".631"
+                                                                offset="63.146%" />
+                                                            <stop
+                                                                stop-color="#000"
+                                                                offset="100%" />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <g
+                                                        fill="none"
+                                                        fill-rule="evenodd">
+                                                        <g
+                                                            transform="translate(1 1)">
+                                                            <path
+                                                                d="M36 18c0-9.94-8.06-18-18-18"
+                                                                id="Oval-2"
+                                                                stroke="url(#a)"
+                                                                stroke-width="2">
+                                                                <animateTransform
+                                                                    attributeName="transform"
+                                                                    type="rotate"
+                                                                    from="0 18 18"
+                                                                    to="360 18 18"
+                                                                    dur="0.9s"
+                                                                    repeatCount="indefinite" />
+                                                            </path>
+                                                            <circle
+                                                                fill="#000"
+                                                                cx="36"
+                                                                cy="18"
+                                                                r="1">
+                                                                <animateTransform
+                                                                    attributeName="transform"
+                                                                    type="rotate"
+                                                                    from="0 18 18"
+                                                                    to="360 18 18"
+                                                                    dur="0.9s"
+                                                                    repeatCount="indefinite" />
+                                                            </circle>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            Like
+                                        </a>
+                                    </div>
+                                    <div
+                                        class="stats-num d-table-cell w-50 text-end">
+                                        <p>{{ design.likes }} Likes</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="designs-tag-outer mt-3">
+                                <h2 class="fs-6 fw-normal mb-2 mx-3">Tags: </h2>
+                                <span class="designs-tag fs-5 mx-3">
+                                    <RouterLink
+                                        :to="{
+                                            name: 'home',
+                                            query: { tags: tag },
+                                        }"
+                                        :title="tag"
+                                        v-for="tag in design.tags_list.tag"
+                                        :key="tag"
+                                        >{{ tag }}
+                                    </RouterLink>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <div class="design-comments mt-3">
                         <h1 class="fs-5 fw-light mb-4">
@@ -106,18 +330,18 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-12 col-md-4 d-none d-md-block">
                     <div class="post-detail-sidebar">
                         <div class="card" style="border: 0">
                             <div class="card-body pt-0">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <img
                                             :src="design.user.profile_image"
                                             alt="User Image"
-                                            class="img-fluid rounded-circle" />
+                                            class="img-fluid rounded-circle mt-1" />
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-8">
                                         <RouterLink
                                             :to="{
                                                 name: 'user-details',
@@ -408,7 +632,7 @@
                 console.error(error);
             }
             isLoadingLike.value = false;
-        }else {
+        } else {
             showModal.value = true;
         }
     }

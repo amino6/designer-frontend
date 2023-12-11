@@ -103,8 +103,6 @@ export const useSearchStore = defineStore('search', {
             } catch (e) {
                 console.error(e);
             }
-
-            this.isLoading = false;
         },
         async getDesigners(load = false) {
             this.designs = null;
@@ -128,8 +126,6 @@ export const useSearchStore = defineStore('search', {
             } catch (e) {
                 console.error(e);
             }
-
-            this.isLoading = false;
         },
         async search() {
             this.isLoading = true;

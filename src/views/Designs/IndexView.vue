@@ -3,68 +3,6 @@
         <div class="card">
             <h2 class="font-24 mt-4 mb-2 mx-3 fw-700">Designs</h2>
             <div class="card-body">
-                <!-- <div class="card">
-                    <div class="card-header">
-                        <h5 class="my-1">Designs</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col"></th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        v-for="design in designs"
-                                        :key="design.id">
-                                        <td style="max-width: 50px">
-                                            <img
-                                                :src="
-                                                    design.images['thumbnail']
-                                                "
-                                                alt="design image"
-                                                style="
-                                                    width: 100%;
-                                                    max-height: 130px;
-                                                    object-fit: contain;
-                                                " />
-                                        </td>
-                                        <td class="align-middle">
-                                            {{ design.title }}
-                                        </td>
-                                        <td class="align-middle">
-                                            {{
-                                                design.is_live
-                                                    ? "Published"
-                                                    : "Draft"
-                                            }}
-                                        </td>
-                                        <td class="align-middle">
-                                            <router-link
-                                                :to="{
-                                                    name: 'designs-edit',
-                                                    params: { id: design.id },
-                                                }"
-                                                class="btn btn-primary btn-sm">
-                                                Edit
-                                            </router-link>
-                                            <button
-                                                class="btn btn-danger btn-sm mx-2"
-                                                @click="init_delete(design.id)">
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div> -->
                 <div id="wrapper"></div>
             </div>
         </div>
@@ -74,7 +12,6 @@
 <script setup>
     import { onBeforeMount, ref, watch } from "vue";
     import { request, getCSRFToken } from "../../helpers/request";
-    import DesignBox from "../../components/DesignBox.vue";
     import { delete_design } from "../../helpers/design";
     import { Grid, h } from "gridjs";
     import { useRoute, useRouter } from "vue-router";
@@ -113,7 +50,7 @@
                 {
                     id: "thumbnail",
                     name: "",
-                    width: "105px",
+                    minWidth: "105px",
                     formatter: cell => {
                         return h("img", {
                             src: cell,
@@ -127,14 +64,14 @@
                     },
                 },
                 "Title",
-                { name: "Status", sort: false },
-                "Likes",
-                "Tags",
+                { name: "Status", sort: false, minWidth: "105px" },
+                { name: "Likes", minWidth: "105px" },
+                { name: "Tags", minWidth: "105px" },
                 {
                     name: "Actions",
                     id: "id",
                     sort: false,
-                    width: "170px",
+                    minWidth: "170px",
                     formatter: cell => {
                         return [
                             h(
@@ -283,7 +220,7 @@
                     paddingLeft: "8px",
                 },
                 table: {
-                    width: "100%",
+                    minWidth: "100%",
                 },
             },
         });

@@ -73,6 +73,17 @@
             height: 100%;
             box-shadow: none;
             width: 140px;
+
+            @media only screen and (max-width: 470px) {
+                width: 110px;
+
+                span {
+                    display: inline-block;
+                    margin-left: -4px;
+                    margin-right: 3px;
+                    font-size: 15px;
+                }
+            }
         }
     }
 </style>
