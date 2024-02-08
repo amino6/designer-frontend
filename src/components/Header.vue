@@ -5,7 +5,7 @@
         <nav class="navbar navbar-light navbar-expand-sm">
             <div class="container-xl">
                 <a href="/" class="navbar-brand">
-                    DesignHouse
+                    DesignShare
                 </a>
 
                 <ul class="nav-list" v-if="authStore.user === null">
